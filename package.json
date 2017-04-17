@@ -1,0 +1,26 @@
+{
+  "name": "create-react",
+  "version": "0.0.1",
+  "description": "react generator",
+  "main": "index.js",
+  "scripts": {},
+  "bin": {
+    "peak": "./bin/peak.js"
+  },
+  "author": "mrlyj",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "commander": "^2.9.0",
+    "common-bin": "^2.2.0",
+    "win-spawn": "^2.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-eslint": "^7.2.1",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0"
+  }
+}
