@@ -15,7 +15,7 @@ function wrap(sp) {
 }
 
 function executable(subcmd) {
-  var file = path.join(__dirname, 'command/' + subcmd+'.js');
+  var file = path.join(__dirname, subcmd+'.js');
   if (exists(file)) {
     return file;
   }
@@ -30,24 +30,35 @@ program
 
 program
     .command('new')
-    .description('build project')
-    .action(function (env, options) {
+    .description('构建项目工程')
+    .usage('new <project name>')
+    .action(function (cmd, options) {
         console.log(chalk.green('peak: build project'));
         /**
          * 判断是否存在文件
          * 是 -> 提示
          * 否 -> 执行命令
          */
-        if(exists(env)){
+        if(exists(cmd)){
             console.log(chalk.red('peak: project name is exist!'))
         }else{
             console.log(chalk.green('peak: executing command (new...)'))
             const args = process.argv.slice(3)
             const subcmd = program.args[0]
             const runPath = executable(process.argv.slice(2,3))
-            console.log(runPath)
-            wrap(spawn(runPath, args, {stdio: 'inherit'}))
+            wrap(spawn(runPath, args, {stdio: 'inherit', customFds: [0, 1, 2]}))
         }
-    });
+    }).on('--help', function() {
+    console.log('  Examples:');
+    console.log();
+    console.log('    $ peak new react-demo');
+    console.log();
+  });
+
+  program
+      .command('*')
+      .action(function(cmd){
+          console.log('peak: deploying "%s"', cmd);
+      });
 
 program.parse(process.argv);
