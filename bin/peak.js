@@ -23,15 +23,15 @@ function executable(subcmd) {
 
 program
   .version(packConf.version)
-  .option('-C, --chdir <path>', 'change the working directory')
-  .option('-c, --config <path>', 'set config path. defaults to ./deploy.conf')
-  .option('-T, --no-tests', 'ignore test hook')
+//   .option('-C, --chdir <path>', 'change the working directory')
+//   .option('-c, --config <path>', 'set config path. defaults to ./deploy.conf')
+//   .option('-T, --no-tests', 'ignore test hook')
 
 
 program
     .command('new')
     .description('构建项目工程')
-    .usage('new <project name>')
+    .usage('<project name>')
     .action(function (cmd, options) {
         console.log(chalk.green('peak: build project'));
         /**
@@ -40,7 +40,8 @@ program
          * 否 -> 执行命令
          */
         if(exists(cmd)){
-            console.log(chalk.red('peak: project name is exist!'))
+            console.log(chalk.red('peak: project name is exist!'));
+            process.exit(1);
         }else{
             console.log(chalk.green('peak: executing command (new...)'))
             const args = process.argv.slice(3)
@@ -56,7 +57,31 @@ program
   });
 
   program
+    .command('doc')
+    .description('相关技术文档')
+    .usage('<doc name>')
+    .action(function (cmd, options) {
+        console.log(chalk.green('peak: find document'));
+        // if(exists(cmd)){
+        //     console.log(chalk.red('peak: project name is exist!'))
+        // }else{
+        //     console.log(chalk.green('peak: executing command (new...)'))
+        //     const args = process.argv.slice(3)
+        //     const subcmd = program.args[0]
+        //     const runPath = executable(process.argv.slice(2,3))
+        //     wrap(spawn(runPath, args, {stdio: 'inherit', customFds: [0, 1, 2]}))
+        // }
+    }).on('--help', function() {
+    console.log('  Examples:');
+    console.log();
+    console.log('    $ peak doc ---> return 所有可选择文档目录');
+    console.log('    $ peak doc react ---> return react相关技术文档目录');
+    console.log();
+  });
+
+  program
       .command('*')
+      .description('无此命令')
       .action(function(cmd){
           console.log('peak: deploying "%s"', cmd);
       });

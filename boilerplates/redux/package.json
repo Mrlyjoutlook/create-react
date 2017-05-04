@@ -4,15 +4,88 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "better-npm-run start",
+    "dev": "better-npm-run dev",
+    "deploy": "better-npm-run deploy",
+    "deploy:dev": "better-npm-run deploy:dev",
+    "deploy:prod": "better-npm-run deploy:prod",
+    "clean": "rimraf dist"
+  },
+  "betterScripts": {
+    "compile": {
+      "command": "node bin/compile",
+      "env": {
+      }
+    },
+    "dev": {
+      "command": "nodemon bin/dev-server --ignore dist --ignore coverage --ignore tests --ignore src",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    "start": {
+      "command": "node bin/dev-server",
+      "env": {
+      }
+    },
+    "deploy": {
+      "command": "npm run lint && npm run test && npm run clean && npm run compile",
+      "env": {
+      }
+    },
+    "deploy:dev": {
+      "command": "npm run deploy",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    "deploy:prod": {
+      "command": "npm run deploy",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
   },
   "devDependencies": {
     "babel-eslint": "^7.2.1",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-babel": "^4.1.1",
     "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^4.0.0"
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-react": "^6.10.3",
+    "express": "^4.15.2",
+    "nodemon": "^1.11.0",
+    "redbox-react": "^1.3.6",
+    "webpack-dev-middleware": "^1.10.2",
+    "webpack-hot-middleware": "^2.18.0"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "mrlyj",
+  "license": "ISC",
+  "dependencies": {
+    "autoprefixer": "^6.7.7",
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "css-loader": "^0.28.1",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.3",
+    "normalize.css": "^7.0.0",
+    "postcss-loader": "^1.3.3",
+    "postcss-pxtorem": "^4.0.1",
+    "prop-types": "^15.5.8",
+    "react": "^15.5.4",
+    "react-redux": "^5.0.4",
+    "react-router": "^4.1.1",
+    "redux": "^3.6.0",
+    "redux-thunk": "^2.2.0",
+    "rimraf": "^2.6.1",
+    "style-loader": "^0.17.0",
+    "url-loader": "^0.5.8",
+    "webpack": "^2.4.1"
+  }
 }
