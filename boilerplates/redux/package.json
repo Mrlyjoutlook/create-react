@@ -14,8 +14,7 @@
   "betterScripts": {
     "compile": {
       "command": "node bin/compile",
-      "env": {
-      }
+      "env": {}
     },
     "dev": {
       "command": "nodemon bin/dev-server --ignore dist --ignore coverage --ignore tests --ignore src",
@@ -25,13 +24,11 @@
     },
     "start": {
       "command": "node bin/dev-server",
-      "env": {
-      }
+      "env": {}
     },
     "deploy": {
       "command": "npm run lint && npm run test && npm run clean && npm run compile",
-      "env": {
-      }
+      "env": {}
     },
     "deploy:dev": {
       "command": "npm run deploy",
@@ -72,6 +69,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "css-loader": "^0.28.1",
+    "cssnano": "^3.10.0",
     "less": "^2.7.2",
     "less-loader": "^4.0.3",
     "normalize.css": "^7.0.0",
@@ -86,6 +84,7 @@
     "rimraf": "^2.6.1",
     "style-loader": "^0.17.0",
     "url-loader": "^0.5.8",
-    "webpack": "^2.4.1"
+    "webpack": "^2.4.1",
+    "yargs": "^8.0.1"
   }
 }
