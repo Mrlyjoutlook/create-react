@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^7.2.1",
+    "compression": "^1.6.2",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-babel": "^4.1.1",

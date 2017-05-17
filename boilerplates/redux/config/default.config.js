@@ -4,6 +4,8 @@
 const path = require('path');
 const argv = require('yargs').argv;
 const ip = require('ip');
+const pkg = require('../package.json');
+const chalk = require('chalk');
 
 const config = {
   env: process.env.NODE_ENV || 'development',
@@ -13,8 +15,14 @@ const config = {
   dir_public: 'public',
   dir_server: 'server',
   dir_test: 'tests',
+  /**
+   * ip和端口设置
+   */
   server_host: ip.address(), // use string 'localhost' to prevent exposure on local network
   server_port: process.env.PORT || 3000,
+  /**
+   * 生产环境配置
+   */
   compiler_babel: {
     cacheDirectory: true,
     plugins: ['transform-runtime'],
@@ -50,5 +58,15 @@ config.globals = {
   '__PROD__': config.env === 'production',
   '__TEST__': config.env === 'test',
 };
+/**
+ * 校验默认配置中所需要的依赖是否存在
+ */
+config.compiler_vendors = config.compiler_vendors.filter((dep) => {
+  if (pkg.dependencies[dep]) {
+    return true;
+  } else {
+    console.log(chalk.yellow('waring：默认配置中的compiler_vendors所需的依赖缺失！'));
+  }
+});
 
-module.exports = config;
+module.exports = Object.assign(config, require('./default.config'));
