@@ -20,7 +20,7 @@ const config = {
     plugins: ['transform-runtime'],
     presets: ['es2015', 'react', 'stage-0'],
   },
-  compiler_devtool: 'source-map',
+  compiler_devtool: 'cheap-module-eval-source-map',
   compiler_hash_type: 'hash',
   compiler_fail_on_warning: false,
   compiler_quiet: false,
@@ -30,6 +30,9 @@ const config = {
     chunkModules: false,
     colors: true,
   },
+  compiler_entry: [
+
+  ],
   compiler_vendors: [
     'react',
     'react-redux',

@@ -13,11 +13,11 @@ const __TEST__ = defaultConf.globals.__TEST__;
 
 
 const webpackConfig = {
+  devtool : defaultConf.compiler_devtool,
   name    : 'client',
   target  : 'web',
-  devtool : defaultConf.compiler_devtool,
   resolve : {
-    root       : defaultConf.paths.client(),
+    root: defaultConf.paths.client(),
     extensions : ['', '.js', '.jsx', '.json']
   },
   module : {}
