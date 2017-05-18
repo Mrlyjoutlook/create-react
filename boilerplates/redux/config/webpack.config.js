@@ -5,61 +5,62 @@ const webpack = require('webpack');
 const cssnano = require('cssnano');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const defaultConf = require('./default.config');
+const defaultConfing = require('./default.config');
 
-const __DEV__ = defaultConf.globals.__DEV__;
-const __PROD__ = defaultConf.globals.__PROD__;
-const __TEST__ = defaultConf.globals.__TEST__;
+const __DEV__ = defaultConfing.globals.__DEV__;
+const __PROD__ = defaultConfing.globals.__PROD__;
+const __TEST__ = defaultConfing.globals.__TEST__;
 
 
 const webpackConfig = {
-  devtool : defaultConf.compiler_devtool,
   name    : 'client',
   target  : 'web',
   resolve : {
-    root: defaultConf.paths.client(),
-    extensions : ['', '.js', '.jsx', '.json']
+    root: defaultConfing.paths.client(),
+    extensions : ['.js', '.jsx', '.json'],
+    alias: defaultConfing.compiler_resolve_alias
   },
   module : {}
 }
-// ------------------------------------
-// Entry Points
-// ------------------------------------
-const APP_ENTRY = defaultConf.paths.client('main.js')
+/**
+ * devtool
+ */
+webpackConfig.devtool = __DEV__ ? defaultConfing.dev_devtool : defaultConfing.compiler_devtool
+/**
+ * entry
+ */
+const APP_ENTRY = defaultConfing.paths.client('main.js')
 
 webpackConfig.entry = {
   app : __DEV__
-    ? [APP_ENTRY].concat(`webpack-hot-middleware/client?path=$ defaultConf.compiler_public_path}__webpack_hmr`)
+    ? [APP_ENTRY].concat(`webpack-hot-middleware/client?path=$ defaultConfing.compiler_public_path}__webpack_hmr`)
     : [APP_ENTRY],
-  vendor : defaultConf.compiler_vendors
+  vendor : defaultConfing.compiler_vendors
 }
-
-// ------------------------------------
-// Bundle Output
-// ------------------------------------
+/**
+ * output
+ */
 webpackConfig.output = {
-  filename   : `[name].[$ defaultConf.compiler_hash_type}].js`,
-  path       : defaultConf.paths.dist(),
-  publicPath : defaultConf.compiler_public_path
+  filename   : `[name].[$ defaultConfing.compiler_hash_type}].js`,
+  path       : defaultConfing.paths.dist(),
+  publicPath : defaultConfing.compiler_public_path
 }
-
-// ------------------------------------
-// Externals
-// ------------------------------------
-webpackConfig.externals = {}
+/**
+ * externals
+ */
+webpackConfig.externals = defaultConfing.externals
 webpackConfig.externals['react/lib/ExecutionEnvironment'] = true
 webpackConfig.externals['react/lib/ReactContext'] = true
 webpackConfig.externals['react/addons'] = true
-
-// ------------------------------------
-// Plugins
-// ------------------------------------
+/**
+ * plugins
+ */
 webpackConfig.plugins = [
-  new webpack.DefinePlugin defaultConf.globals),
+  new webpack.DefinePlugin defaultConfing.globals),
   new HtmlWebpackPlugin({
-    template : defaultConf.paths.client('index.html'),
+    template : defaultConfing.paths.client('index.html'),
     hash     : false,
-    favicon  : defaultConf.paths.public('favicon.ico'),
+    favicon  : defaultConfing.paths.public('favicon.ico'),
     filename : 'index.html',
     inject   : 'body',
     minify   : {
@@ -85,13 +86,14 @@ if (__TEST__ && !argv.watch) {
 }
 
 if (__DEV__) {
-  debug('Enabling plugins for live development (HMR, NoErrors).')
   webpackConfig.plugins.push(
+    // 开启全局的模块热替换(HMR)
     new webpack.HotModuleReplacementPlugin(),
+    // 当模块热替换(HMR)时在浏览器控制台输出对用户更友好的模块名字信息
+    new webpack.NamedModulesPlugin(),
     new webpack.NoErrorsPlugin()
   )
 } else if (__PROD__) {
-  debug('Enabling plugins for production (OccurenceOrder, Dedupe & UglifyJS).')
   webpackConfig.plugins.push(
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.optimize.DedupePlugin(),
@@ -123,7 +125,7 @@ webpackConfig.module.loaders = [{
   test    : /\.(js|jsx)$/,
   exclude : /node_modules/,
   loader  : 'babel',
-  query   : defaultConf.compiler_babel
+  query   : defaultConfing.compiler_babel
 }, {
   test   : /\.json$/,
   loader : 'json'
@@ -157,7 +159,7 @@ webpackConfig.module.loaders.push({
 })
 
 webpackConfig.sassLoader = {
-  includePaths : defaultConf.paths.client('styles')
+  includePaths : defaultConfing.paths.client('styles')
 }
 
 webpackConfig.postcss = [

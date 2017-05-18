@@ -21,14 +21,18 @@ const config = {
   server_host: ip.address(), // use string 'localhost' to prevent exposure on local network
   server_port: process.env.PORT || 3000,
   /**
-   * 生产环境配置
+   * webpack通用配置
    */
-  compiler_babel: {
-    cacheDirectory: true,
-    plugins: ['transform-runtime'],
-    presets: ['es2015', 'react', 'stage-0'],
-  },
-  compiler_devtool: 'cheap-module-eval-source-map',
+  externals: {},
+  /**
+   * webpack开发环境配置
+   */
+  dev_devtool: 'cheap-module-eval-source-map',
+  /**
+   * webpack生产环境配置
+   */
+  compiler_devtool: 'source-map',
+  compiler_resolve_alias: {},
   compiler_hash_type: 'hash',
   compiler_fail_on_warning: false,
   compiler_quiet: false,
@@ -47,6 +51,11 @@ const config = {
     'react-router',
     'redux',
   ],
+  compiler_babel: {
+    cacheDirectory: true,
+    plugins: ['transform-runtime'],
+    presets: ['es2015', 'react', 'stage-0'],
+  },
 };
 
 config.globals = {
@@ -58,6 +67,19 @@ config.globals = {
   '__PROD__': config.env === 'production',
   '__TEST__': config.env === 'test',
 };
+
+function base() {
+  const args = [config.path_base].concat([].slice.call(arguments));
+  return path.resolve.apply(path, args);
+}
+
+config.paths = {
+  base,
+  client: base.bind(null, config.dir_client),
+  public: base.bind(null, config.dir_public),
+  dist: base.bind(null, config.dir_dist),
+};
+
 /**
  * 校验默认配置中所需要的依赖是否存在
  */
@@ -69,4 +91,4 @@ config.compiler_vendors = config.compiler_vendors.filter((dep) => {
   }
 });
 
-module.exports = Object.assign(config, require('./default.config'));
+module.exports = Object.assign(config, require('./custom.config'));
