@@ -34,7 +34,7 @@ const APP_ENTRY = defaultConfing.paths.client('main.js');
 
 webpackConfig.entry = {
   app: __DEV__
-    ? [APP_ENTRY].concat(`webpack-hot-middleware/client?path=$ defaultConfing.compiler_public_path}__webpack_hmr`)
+    ? [APP_ENTRY].concat(`webpack-hot-middleware/client?path=${defaultConfing.compiler_public_path}__webpack_hmr`)
     : [APP_ENTRY],
   vendor: defaultConfing.compiler_vendors,
 };
@@ -42,8 +42,8 @@ webpackConfig.entry = {
  * output
  */
 webpackConfig.output = {
-  filename: `[name].[$ defaultConfing.compiler_hash_type}].js`,
-  path: defaultConfing.paths.dist(),
+  filename: '[name].[chunkHash].js',
+  path: defaultConfing.paths.dist,
   publicPath: defaultConfing.compiler_public_path,
 };
 /**
@@ -101,8 +101,11 @@ if (__DEV__) {
     new webpack.optimize.AggressiveMergingPlugin(),
     // 提取共享的依赖
     new webpack.optimize.CommonsChunkPlugin({
-      names: ['vendor'],
+      names: ['vendor', 'manifest'],
+      minChunks: Infinity,
     }),
+    // 设置模块的命名方式为无序的ID命名方式，防止无相关的模块ID发生了改变而修改hash
+    new webpack.HashedModuleIdsPlugin(),
   );
 }
 

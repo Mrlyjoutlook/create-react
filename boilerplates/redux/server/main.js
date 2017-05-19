@@ -15,20 +15,20 @@ if (defaultConfig.env === 'development') {
   const compiler = webpack(webpackConfig);
 
   app.use(devMiddleware(compiler, {
-    publicPath: webpackConfig.output.publicPath,
-    contentBase: defaultConfig.paths.client(),
+    publicPath: webpackConfig.compiler_public_path,
+    contentBase: defaultConfig.paths.client,
     hot: true,
-    quiet: defaultConfig.compiler_quiet,
-    noInfo: defaultConfig.compiler_quiet,
+    quiet: false,
+    noInfo: false,
     lazy: false,
-    stats: defaultConfig.compiler_stats
+    stats: { colors: true },
   }));
   app.use(hotMiddleware(compiler, {
     path: '/__webpack_hmr',
   }));
 
   // proxy 代理功能
-  app.use('/api', proxy({ target: 'http://localhost:9000', changeOrigin: true }));
+  app.use('/api', proxy({ target: 'http://localhost:80', changeOrigin: true }));
 
   app.use(express.static(defaultConfig.paths.public()));
 } else {

@@ -1,8 +1,7 @@
 {
   "name": "react",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "react redux app project",
   "scripts": {
     "start": "better-npm-run start",
     "dev": "better-npm-run dev",
@@ -12,12 +11,8 @@
     "clean": "rimraf dist"
   },
   "betterScripts": {
-    "compile": {
-      "command": "node bin/compile",
-      "env": {}
-    },
     "dev": {
-      "command": "nodemon bin/dev-server --ignore dist --ignore coverage --ignore tests --ignore src",
+      "command": "nodemon bin/dev-server --ignore dist --ignore public --ignore src",
       "env": {
         "NODE_ENV": "development"
       }
@@ -26,8 +21,12 @@
       "command": "node bin/dev-server",
       "env": {}
     },
+    "compile": {
+      "command": "node bin/compile",
+      "env": {}
+    },
     "deploy": {
-      "command": "npm run lint && npm run test && npm run clean && npm run compile",
+      "command": " npm run clean && npm run compile",
       "env": {}
     },
     "deploy:dev": {

@@ -8,13 +8,30 @@ const pkg = require('../package.json');
 const chalk = require('chalk');
 
 const config = {
+  /**
+   * 应用环境
+   */
   env: process.env.NODE_ENV || 'development',
+  /**
+   * 配置环境
+   * globals 会配置到webpack.DefinePlugin中
+   */
+  globals: {
+    'process.env.NODE_ENV': JSON.stringify(this.env),
+    'NODE_ENV': this.env,
+    '__DEV__': this.env === 'development',
+    '__PROD__': this.env === 'production',
+    '__TEST__': this.env === 'test',
+  },
+  /**
+   * dir目录
+   */
   path_base: path.resolve(__dirname, '..'),
   dir_client: 'src',
   dir_dist: 'dist',
   dir_public: 'public',
   dir_server: 'server',
-  dir_test: 'tests',
+  dir_mock: 'mock',
   /**
    * ip和端口设置
    */
@@ -35,9 +52,6 @@ const config = {
    */
   compiler_devtool: 'source-map',
   compiler_resolve_alias: {},
-  compiler_hash_type: 'hash',
-  compiler_fail_on_warning: false,
-  compiler_quiet: false,
   compiler_public_path: '/',
   compiler_stats: {
     chunks: false,
@@ -54,25 +68,16 @@ const config = {
     'redux',
   ],
 };
-// config.globals 会配置到webpack.DefinePlugin中
-config.globals = {
-  'process.env.NODE_ENV': JSON.stringify(config.env),
-  'NODE_ENV': config.env,
-  '__DEV__': config.env === 'development',
-  '__PROD__': config.env === 'production',
-  '__TEST__': config.env === 'test',
-};
 
-function base() {
-  const args = [config.path_base].concat([].slice.call(arguments));
-  return path.resolve.apply(path, args);
+function base(arg) {
+  return path.resolve(config.path_base, arg);
 }
 
 config.paths = {
-  base,
-  client: base.bind(null, config.dir_client),
-  public: base.bind(null, config.dir_public),
-  dist: base.bind(null, config.dir_dist),
+  base: base(),
+  client: base(config.dir_client),
+  public: base(config.dir_public),
+  dist: base(config.dir_dist),
 };
 
 /**
