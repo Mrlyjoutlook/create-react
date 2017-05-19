@@ -89,15 +89,16 @@ if (__DEV__) {
     new LodashModuleReplacementPlugin(defaultConfing.plugins_lodashModule),
     // webpack 2.x 默认配置 为组件和模块分配ID
     // new webpack.optimize.OccurenceOrderPlugin();
-    // 查找相等或近似的模块，去除生成的文件中出现重复的模块
-    new webpack.optimize.DedupePlugin(),
+    // webpack 2.x 移除 查找相等或近似的模块，去除生成的文件中出现重复的模块
+    // new webpack.optimize.DedupePlugin(),
     // js 代码压缩
     new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true, // uglifyjs 的警告能够对应到正确的代码行
       compress: {
         screw_ie8: true, // React doesn't support IE8
         unused: true,
         dead_code: true,
-        warnings: false,
+        warnings: true,  // uglifyjs 的警告信息
       },
       mangle: {
         screw_ie8: true,
@@ -149,7 +150,7 @@ webpackConfig.plugins.push(
   }),
 );
 /**
- * module
+ * module.rules
  */
 // javascript loaders
 webpackConfig.module.rules = [{
@@ -157,6 +158,12 @@ webpackConfig.module.rules = [{
   use: ['babel-loader'],
   exclude: /node_modules/,
 }];
+// eslint loaders
+webpackConfig.module.rules.push({
+  test: /\.js$/,
+  enforce: 'pre',
+  use: 'eslint-loader',
+});
 // style-css loaders
 webpackConfig.module.rules.push({
   test: /\.css$/,
@@ -208,11 +215,6 @@ webpackConfig.module.rules.push({
       importLoaders: 1,
     },
   }, {
-    loader: 'less-loader',
-    options: {
-      noIeCompat: true,
-    },
-  }, {
     loader: 'postcss-loader',
   }],
 });
@@ -228,21 +230,30 @@ webpackConfig.module.loaders.push(
   { test: /\.(flv|mp4)$/, use: ['file-loader'] },
 );
 
-// if (!__DEV__) {
-//   webpackConfig.module.loaders.filter((loader) =>
-//     loader.loaders && loader.loaders.find((name) => /css/.test(name.split('?')[0]))
-//   ).forEach((loader) => {
-//     const first = loader.loaders[0]
-//     const rest = loader.loaders.slice(1)
-//     loader.loader = ExtractTextPlugin.extract(first, rest.join('!'))
-//     delete loader.loaders
-//   })
+// ExtractTextPlugin
+if (defaultConfing.extractTextPlugin.disable) {
+  webpackConfig.module.loaders.filter((loader) =>
+    loader.loaders && loader.loaders.find((name) => /css/.test(name.split('?')[0]))
+  ).forEach((loader) => {
+    const first = loader.loaders[0]
+    const rest = loader.loaders.slice(1)
+    loader.loader = ExtractTextPlugin.extract(first, rest.join('!'))
+    delete loader.loaders
+  });
 
-//   webpackConfig.plugins.push(
-//     new ExtractTextPlugin('[name].[contenthash].css', {
-//       allChunks: true
-//     })
-//   )
-// }
+  webpackConfig.plugins.push(
+    new ExtractTextPlugin({
+      filename: webpackConfig.extractTextPlugin.config.filename,
+      disable: false,
+      allChunks: true,
+    }),
+  );
+}
+
+// ExtractTextPlugin.extract({
+// +        fallback: "style-loader",
+// +        use: "css-loader",
+// +        publicPath: "/dist"
+// +      })
 
 module.exports = webpackConfig;

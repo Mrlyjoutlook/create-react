@@ -69,6 +69,9 @@ const config = {
   ],
 };
 
+/**
+ * 应用开发路径
+ */
 function base(arg) {
   return path.resolve(config.path_base, arg);
 }
@@ -78,6 +81,17 @@ config.paths = {
   client: base(config.dir_client),
   public: base(config.dir_public),
   dist: base(config.dir_dist),
+};
+
+/**
+ * 应用
+ */
+config.extractTextPlugin = {
+  disable: false,
+  config: {
+    publicPath: config.path.dist,
+    filename: 'app.css',
+  },
 };
 
 /**
