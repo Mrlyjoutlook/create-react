@@ -18,12 +18,14 @@ const config = {
   /**
    * ip和端口设置
    */
-  server_host: ip.address(), // use string 'localhost' to prevent exposure on local network
+  server_host: ip.address(),
   server_port: process.env.PORT || 3000,
+  mockServer_prot: 3001,
   /**
    * webpack通用配置
    */
   externals: {},
+  plugins_lodashModule: {},
   /**
    * webpack开发环境配置
    */
@@ -51,17 +53,10 @@ const config = {
     'react-router',
     'redux',
   ],
-  compiler_babel: {
-    cacheDirectory: true,
-    plugins: ['transform-runtime'],
-    presets: ['es2015', 'react', 'stage-0'],
-  },
 };
-
+// config.globals 会配置到webpack.DefinePlugin中
 config.globals = {
-  'process.env': {
-    'NODE_ENV': JSON.stringify(config.env),
-  },
+  'process.env.NODE_ENV': JSON.stringify(config.env),
   'NODE_ENV': config.env,
   '__DEV__': config.env === 'development',
   '__PROD__': config.env === 'production',
