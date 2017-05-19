@@ -30,9 +30,9 @@ if (defaultConfig.env === 'development') {
   // proxy 代理功能
   app.use('/api', proxy({ target: 'http://localhost:80', changeOrigin: true }));
 
-  app.use(express.static(defaultConfig.paths.public()));
+  app.use(express.static(defaultConfig.paths.public));
 } else {
-  app.use(express.static(defaultConfig.paths.dist()));
+  app.use(express.static(defaultConfig.paths.dist));
 }
 
 module.exports = app;

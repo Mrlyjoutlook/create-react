@@ -7,6 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const DashboardPlugin = require('webpack-dashboard/plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 const defaultConfing = require('./default.config');
 
 const __DEV__ = defaultConfing.globals.__DEV__;
@@ -42,7 +43,7 @@ webpackConfig.entry = {
  * output
  */
 webpackConfig.output = {
-  filename: '[name].[chunkHash].js',
+  filename: '[name].[chunkhash:8].js',
   path: defaultConfing.paths.dist,
   publicPath: defaultConfing.compiler_public_path,
 };
@@ -93,9 +94,17 @@ if (__DEV__) {
     // js 代码压缩
     new webpack.optimize.UglifyJsPlugin({
       compress: {
+        screw_ie8: true, // React doesn't support IE8
         unused: true,
         dead_code: true,
         warnings: false,
+      },
+      mangle: {
+        screw_ie8: true,
+      },
+      output: {
+        comments: false,
+        screw_ie8: true,
       },
     }),
     new webpack.optimize.AggressiveMergingPlugin(),
@@ -106,6 +115,11 @@ if (__DEV__) {
     }),
     // 设置模块的命名方式为无序的ID命名方式，防止无相关的模块ID发生了改变而修改hash
     new webpack.HashedModuleIdsPlugin(),
+    // 生产资源映射表
+    new ManifestPlugin({
+      fileName: 'manifest.json',
+      basePath: defaultConfing.path.dist,
+    }),
   );
 }
 
