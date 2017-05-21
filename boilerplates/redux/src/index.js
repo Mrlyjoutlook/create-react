@@ -37,7 +37,7 @@ if (__DEV__) {
       setImmediate(() => {
         ReactDOM.unmountComponentAtNode(MOUNT_NODE);
         render();
-      })
+      }),
     );
   }
 }

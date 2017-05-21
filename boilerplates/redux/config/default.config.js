@@ -42,7 +42,6 @@ const config = {
    * webpack通用配置
    */
   externals: {},
-  plugins_lodashModule: {},
   /**
    * webpack开发环境配置
    */
@@ -84,7 +83,7 @@ config.paths = {
 };
 
 /**
- * 应用
+ * 应用功能
  */
 config.extractTextPlugin = {
   disable: false,
@@ -92,6 +91,33 @@ config.extractTextPlugin = {
     publicPath: config.path.dist,
     filename: 'app.css',
   },
+};
+
+config.htmlWebpackPlugin = {
+  disable: false,
+  config: !this.disable ? {
+    filename: `${path.join(__dirname, '/../dist/index.html')}`,
+    template: `${path.join(__dirname, '/../src/template/index.html')}`,
+    inject: true,
+    excludeChunks: ['vendor'],
+    minify: {
+      removeComments: true, // 移除HTML中的注释
+      collapseWhitespace: true, // 删除空白符与换行符
+      removeRedundantAttributes: true,
+      useShortDoctype: true,
+      removeEmptyAttributes: true,
+      removeStyleLinkTypeAttributes: true,
+      keepClosingSlash: true,
+      minifyJS: true,
+      minifyCSS: true,
+      minifyURLs: true,
+    },
+  } : [],
+};
+
+config.lodashModuleReplacementPlugin = {
+  disable: false,
+  config: {},
 };
 
 /**

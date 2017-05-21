@@ -85,8 +85,6 @@ if (__DEV__) {
   );
 } else if (__PROD__) {
   webpackConfig.plugins.push(
-    // lodash 工具库按需使用插件
-    new LodashModuleReplacementPlugin(defaultConfing.plugins_lodashModule),
     // webpack 2.x 默认配置 为组件和模块分配ID
     // new webpack.optimize.OccurenceOrderPlugin();
     // webpack 2.x 移除 查找相等或近似的模块，去除生成的文件中出现重复的模块
@@ -232,13 +230,15 @@ webpackConfig.module.loaders.push(
 
 // ExtractTextPlugin
 if (defaultConfing.extractTextPlugin.disable) {
-  webpackConfig.module.loaders.filter((loader) =>
-    loader.loaders && loader.loaders.find((name) => /css/.test(name.split('?')[0]))
-  ).forEach((loader) => {
-    const first = loader.loaders[0]
-    const rest = loader.loaders.slice(1)
-    loader.loader = ExtractTextPlugin.extract(first, rest.join('!'))
-    delete loader.loaders
+  webpackConfig.module.loaders.filter(loader => loader.test.toString.indexOf('ss') !== -1)
+  .forEach((rule) => {
+    const first = rule.use[0];
+    const rest = rule.use.slice(1);
+    rule.user = ExtractTextPlugin.extract({
+      fallback: first,
+      use: rest,
+      publicPath: webpackConfig.path.dist,
+    });
   });
 
   webpackConfig.plugins.push(
@@ -250,10 +250,28 @@ if (defaultConfing.extractTextPlugin.disable) {
   );
 }
 
-// ExtractTextPlugin.extract({
-// +        fallback: "style-loader",
-// +        use: "css-loader",
-// +        publicPath: "/dist"
-// +      })
+// htmlWebpackPlugin
+if (webpackConfig.htmlWebpackPlugin.disable) {
+  if (typeof webpackConfig.htmlWebpackPlugin.config === 'Object') {
+    webpackConfig.plugins.push(
+      new HtmlWebpackPlugin(webpackConfig.htmlWebpackPlugin.config),
+    );
+  }
+  if (typeof webpackConfig.htmlWebpackPlugin.config === 'Array') {
+    for (let i = 0, n = webpackConfig.htmlWebpackPlugin.config.length; i < n; i++) {
+      webpackConfig.plugins.push(
+        new HtmlWebpackPlugin(webpackConfig.htmlWebpackPlugin.config[i]),
+      );
+    }
+  }
+}
+
+// lodashModuleReplacementPlugin
+if (webpackConfig.LodashModuleReplacementPlugin.disable) {
+  webpackConfig.plugins.push(
+    // lodash 工具库按需使用插件
+    new LodashModuleReplacementPlugin(defaultConfing.LodashModuleReplacementPlugin.config),
+  );
+}
 
 module.exports = webpackConfig;
