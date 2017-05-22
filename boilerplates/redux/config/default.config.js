@@ -13,17 +13,6 @@ const config = {
    */
   env: process.env.NODE_ENV || 'development',
   /**
-   * 配置环境
-   * globals 会配置到webpack.DefinePlugin中
-   */
-  globals: {
-    'process.env.NODE_ENV': JSON.stringify(this.env),
-    'NODE_ENV': this.env,
-    '__DEV__': this.env === 'development',
-    '__PROD__': this.env === 'production',
-    '__TEST__': this.env === 'test',
-  },
-  /**
    * dir目录
    */
   path_base: path.resolve(__dirname, '..'),
@@ -63,7 +52,7 @@ const config = {
   compiler_vendors: [
     'react',
     'react-redux',
-    'react-router',
+    'react-router-dom',
     'redux',
   ],
 };
@@ -71,24 +60,34 @@ const config = {
 /**
  * 应用开发路径
  */
-function base(arg) {
-  return path.resolve(config.path_base, arg);
+function base() {
+  const args = [config.path_base].concat([].slice.call(arguments));
+  return path.resolve.apply(path, args);
 }
 
 config.paths = {
-  base: base(),
-  client: base(config.dir_client),
-  public: base(config.dir_public),
-  dist: base(config.dir_dist),
+  base: base,
+  client: base.bind(null, config.dir_client),
+  public: base.bind(null, config.dir_public),
+  dist: base.bind(null, config.dir_dist),
 };
-
+/**
+   * 配置环境
+   * globals 会配置到webpack.DefinePlugin中
+   */
+config.globals = {
+  'process.env.NODE_ENV': JSON.stringify(config.env),
+  'NODE_ENV': config.env,
+  '__DEV__': config.env === 'development',
+  '__PROD__': config.env === 'production',
+};
 /**
  * 应用功能
  */
 config.extractTextPlugin = {
   disable: false,
   config: {
-    publicPath: config.path.dist,
+    publicPath: config.paths.dist,
     filename: 'app.css',
   },
 };

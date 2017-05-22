@@ -6,51 +6,47 @@ const cssnano = require('cssnano');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
-const DashboardPlugin = require('webpack-dashboard/plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
-const defaultConfing = require('./default.config');
+const defaultConfig = require('./default.config');
 
-const __DEV__ = defaultConfing.globals.__DEV__;
-const __PROD__ = defaultConfing.globals.__PROD__;
-const __TEST__ = defaultConfing.globals.__TEST__;
+const __DEV__ = defaultConfig.globals.__DEV__;
+const __PROD__ = defaultConfig.globals.__PROD__;
 
 const webpackConfig = {
-  name: 'client',
   target: 'web',
   resolve: {
-    root: defaultConfing.paths.client(),
     extensions: ['.js', '.jsx', '.json'],
-    alias: defaultConfing.compiler_resolve_alias,
+    alias: defaultConfig.compiler_resolve_alias,
   },
   module: {},
 };
 /**
  * devtool
  */
-webpackConfig.devtool = __DEV__ ? defaultConfing.dev_devtool : defaultConfing.compiler_devtool;
+webpackConfig.devtool = __DEV__ ? defaultConfig.dev_devtool : defaultConfig.compiler_devtool;
 /**
  * entry
  */
-const APP_ENTRY = defaultConfing.paths.client('main.js');
+const APP_ENTRY = defaultConfig.paths.client('index.js');
 
 webpackConfig.entry = {
   app: __DEV__
-    ? [APP_ENTRY].concat(`webpack-hot-middleware/client?path=${defaultConfing.compiler_public_path}__webpack_hmr`)
+    ? [APP_ENTRY].concat(`webpack-hot-middleware/client?path=${defaultConfig.compiler_public_path}__webpack_hmr`)
     : [APP_ENTRY],
-  vendor: defaultConfing.compiler_vendors,
+  vendor: defaultConfig.compiler_vendors,
 };
 /**
  * output
  */
 webpackConfig.output = {
-  filename: '[name].[chunkhash:8].js',
-  path: defaultConfing.paths.dist,
-  publicPath: defaultConfing.compiler_public_path,
+  filename: '[name].[hash].js',
+  path: defaultConfig.paths.dist(),
+  publicPath: defaultConfig.compiler_public_path,
 };
 /**
  * externals
  */
-webpackConfig.externals = defaultConfing.externals;
+webpackConfig.externals = defaultConfig.externals;
 webpackConfig.externals['react/lib/ExecutionEnvironment'] = true;
 webpackConfig.externals['react/lib/ReactContext'] = true;
 webpackConfig.externals['react/addons'] = true;
@@ -58,30 +54,17 @@ webpackConfig.externals['react/addons'] = true;
  * plugins
  */
 webpackConfig.plugins = [
-  new webpack.DefinePlugin(defaultConfing.globals),
-  new HtmlWebpackPlugin({
-    template: defaultConfing.paths.client('index.html'),
-    hash: false,
-    favicon: defaultConfing.paths.public('favicon.ico'),
-    filename: 'index.html',
-    inject: 'body',
-    minify: {
-      collapseWhitespace: true,
-    },
-  }),
+  new webpack.DefinePlugin(defaultConfig.globals),
 ];
 
 if (__DEV__) {
   webpackConfig.plugins.push(
-    // 更换终端输出模板
-    new DashboardPlugin(),
     // 开启全局的模块热替换(HMR)
     new webpack.HotModuleReplacementPlugin(),
     // 当模块热替换(HMR)时在浏览器控制台输出对用户更友好的模块名字信息
     new webpack.NamedModulesPlugin(),
     // 跳过编译时出错的代码并记录，使编译后运行时的包不会发生错误
-    new webpack.NoErrorsPlugin(),
-
+    new webpack.NoEmitOnErrorsPlugin()
   );
 } else if (__PROD__) {
   webpackConfig.plugins.push(
@@ -117,8 +100,8 @@ if (__DEV__) {
     // 生产资源映射表
     new ManifestPlugin({
       fileName: 'manifest.json',
-      basePath: defaultConfing.path.dist,
-    }),
+      basePath: defaultConfig.path.dist,
+    })
   );
 }
 
@@ -145,7 +128,7 @@ webpackConfig.plugins.push(
         ];
       },
     },
-  }),
+  })
 );
 /**
  * module.rules
@@ -157,15 +140,14 @@ webpackConfig.module.rules = [{
   exclude: /node_modules/,
 }];
 // eslint loaders
-webpackConfig.module.rules.push({
-  test: /\.js$/,
-  enforce: 'pre',
-  use: 'eslint-loader',
-});
+// webpackConfig.module.rules.push({
+//   test: /\.(js|jsx)$/,
+//   enforce: 'pre',
+//   use: 'eslint-loader',
+// });
 // style-css loaders
 webpackConfig.module.rules.push({
   test: /\.css$/,
-  exclude: null,
   use: [{
     loader: 'style-loader',
   }, {
@@ -182,7 +164,6 @@ webpackConfig.module.rules.push({
 // style-less loaders
 webpackConfig.module.rules.push({
   test: /\.less$/,
-  exclude: null,
   use: [{
     loader: 'style-loader',
   }, {
@@ -202,7 +183,6 @@ webpackConfig.module.rules.push({
 // style-sass loaders
 webpackConfig.module.rules.push({
   test: /\.scss$/,
-  exclude: null,
   use: [{
     loader: 'style-loader',
   }, {
@@ -217,7 +197,7 @@ webpackConfig.module.rules.push({
   }],
 });
 // file loaders
-webpackConfig.module.loaders.push(
+webpackConfig.module.rules.push(
   { test: /\.woff(\?.*)?$/, loader: ['url?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff'] },
   { test: /\.woff2(\?.*)?$/, loader: ['url?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff2'] },
   { test: /\.otf(\?.*)?$/, loader: ['file?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=font/opentype'] },
@@ -225,52 +205,65 @@ webpackConfig.module.loaders.push(
   { test: /\.eot(\?.*)?$/, loader: ['file?prefix=fonts/&name=[path][name].[ext]'] },
   { test: /\.svg(\?.*)?$/, loader: ['url?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=image/svg+xml'] },
   { test: /\.(png|jpg|gif)$/, use: ['url-loader?limit=8192'] },
-  { test: /\.(flv|mp4)$/, use: ['file-loader'] },
+  { test: /\.(flv|mp4)$/, use: ['file-loader'] }
 );
 
 // ExtractTextPlugin
-if (defaultConfing.extractTextPlugin.disable) {
+if (defaultConfig.extractTextPlugin.disable) {
   webpackConfig.module.loaders.filter(loader => loader.test.toString.indexOf('ss') !== -1)
-  .forEach((rule) => {
-    const first = rule.use[0];
-    const rest = rule.use.slice(1);
-    rule.user = ExtractTextPlugin.extract({
-      fallback: first,
-      use: rest,
-      publicPath: webpackConfig.path.dist,
+    .forEach((rule) => {
+      const first = rule.use[0];
+      const rest = rule.use.slice(1);
+      rule.user = ExtractTextPlugin.extract({
+        fallback: first,
+        use: rest,
+        publicPath: webpackConfig.paths.dist(),
+      });
     });
-  });
 
   webpackConfig.plugins.push(
     new ExtractTextPlugin({
       filename: webpackConfig.extractTextPlugin.config.filename,
       disable: false,
       allChunks: true,
-    }),
+    })
   );
 }
 
 // htmlWebpackPlugin
-if (webpackConfig.htmlWebpackPlugin.disable) {
-  if (typeof webpackConfig.htmlWebpackPlugin.config === 'Object') {
+if (defaultConfig.htmlWebpackPlugin.disable) {
+  if (typeof defaultConfig.htmlWebpackPlugin.config === 'Object') {
     webpackConfig.plugins.push(
-      new HtmlWebpackPlugin(webpackConfig.htmlWebpackPlugin.config),
+      new HtmlWebpackPlugin(defaultConfig.htmlWebpackPlugin.config)
     );
   }
-  if (typeof webpackConfig.htmlWebpackPlugin.config === 'Array') {
-    for (let i = 0, n = webpackConfig.htmlWebpackPlugin.config.length; i < n; i++) {
+  if (typeof defaultConfig.htmlWebpackPlugin.config === 'Array') {
+    for (let i = 0, n = defaultConfig.htmlWebpackPlugin.config.length; i < n; i++) {
       webpackConfig.plugins.push(
-        new HtmlWebpackPlugin(webpackConfig.htmlWebpackPlugin.config[i]),
+        new HtmlWebpackPlugin(defaultConfig.htmlWebpackPlugin.config[i])
       );
     }
   }
+} else {
+  webpackConfig.plugins.push(
+    new HtmlWebpackPlugin({
+      template: defaultConfig.paths.client('index.html'),
+      hash: false,
+      favicon: defaultConfig.paths.public('favicon.ico'),
+      filename: 'index.html',
+      inject: 'body',
+      minify: {
+        collapseWhitespace: true,
+      },
+    })
+  );
 }
 
 // lodashModuleReplacementPlugin
-if (webpackConfig.LodashModuleReplacementPlugin.disable) {
+if (defaultConfig.lodashModuleReplacementPlugin.disable) {
   webpackConfig.plugins.push(
     // lodash 工具库按需使用插件
-    new LodashModuleReplacementPlugin(defaultConfing.LodashModuleReplacementPlugin.config),
+    new LodashModuleReplacementPlugin(defaultConfig.LodashModuleReplacementPlugin.config)
   );
 }
 

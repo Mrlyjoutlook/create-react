@@ -11,8 +11,8 @@ const store = createStore(initialState);
 const MOUNT_NODE = document.getElementById('root');
 
 let render = () => {
-  const routes = require('./routes/index').default(store);
-  ReactDOM.render(<AppContainer store={store} routes={routes} />, MOUNT_NODE);
+  // const routes = require('./routes/index').default(store);
+  ReactDOM.render(<AppContainer store={store} />, MOUNT_NODE);
 };
 
 // This code is excluded from production bundle
@@ -33,7 +33,7 @@ if (__DEV__) {
     };
 
     // Setup hot module replacement
-    module.hot.accept('./routes/index', () =>
+    module.hot.accept('./containers/AppContainer', () =>
       setImmediate(() => {
         ReactDOM.unmountComponentAtNode(MOUNT_NODE);
         render();
