@@ -119,6 +119,10 @@ config.lodashModuleReplacementPlugin = {
   config: {},
 };
 
+config.gizp = {
+  disable: false,
+  config: {}
+}
 /**
  * 校验默认配置中所需要的依赖是否存在
  */

@@ -7,6 +7,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
+const HappyPack = require('happypack');
+const os = require('os');
+const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
+const CompressionPlugin = require("compression-webpack-plugin");
 const defaultConfig = require('./default.config');
 
 const __DEV__ = defaultConfig.globals.__DEV__;
@@ -55,6 +59,14 @@ webpackConfig.externals['react/addons'] = true;
  */
 webpackConfig.plugins = [
   new webpack.DefinePlugin(defaultConfig.globals),
+  // 多线程加速代码构建
+  new HappyPack({
+    id: 'js',
+    loaders: ['babel-loader'],
+    threadPool: happyThreadPool,
+    cache: true,
+    verbose: true
+  })
 ];
 
 if (__DEV__) {
@@ -136,7 +148,7 @@ webpackConfig.plugins.push(
 // javascript loaders
 webpackConfig.module.rules = [{
   test: /\.(js|jsx)$/,
-  use: ['babel-loader'],
+  use: ['happypack/loader?id=js'],
   exclude: /node_modules/,
 }];
 // eslint loaders
@@ -208,8 +220,20 @@ webpackConfig.module.rules.push(
   { test: /\.(flv|mp4)$/, use: ['file-loader'] }
 );
 
-// ExtractTextPlugin
-if (defaultConfig.extractTextPlugin.disable) {
+// gizp
+if (__PROD__ && defaultConfig.gizp.disable) {
+  webpackConfig.plugins.push(
+    new CompressionPlugin({
+      asset: "[path].gz[query]",
+      algorithm: "gzip",
+      test: /\.(js|html)$/,
+      threshold: 10240,
+      minRatio: 0.8
+    })
+  );
+}
+// extractTextPlugin
+if (__PROD__ && defaultConfig.extractTextPlugin.disable) {
   webpackConfig.module.loaders.filter(loader => loader.test.toString.indexOf('ss') !== -1)
     .forEach((rule) => {
       const first = rule.use[0];
@@ -231,7 +255,7 @@ if (defaultConfig.extractTextPlugin.disable) {
 }
 
 // htmlWebpackPlugin
-if (defaultConfig.htmlWebpackPlugin.disable) {
+if (__PROD__ && defaultConfig.htmlWebpackPlugin.disable) {
   if (typeof defaultConfig.htmlWebpackPlugin.config === 'Object') {
     webpackConfig.plugins.push(
       new HtmlWebpackPlugin(defaultConfig.htmlWebpackPlugin.config)
