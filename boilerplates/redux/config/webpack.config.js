@@ -43,7 +43,7 @@ webpackConfig.entry = {
  * output
  */
 webpackConfig.output = {
-  filename: '[name].[hash].js',
+  filename: '[name].[chunkhash:8].js',
   path: defaultConfig.paths.dist(),
   publicPath: defaultConfig.compiler_public_path,
 };
@@ -112,7 +112,7 @@ if (__DEV__) {
     // 生产资源映射表
     new ManifestPlugin({
       fileName: 'manifest.json',
-      basePath: defaultConfig.path.dist,
+      basePath: defaultConfig.paths.dist(),
     })
   );
 }

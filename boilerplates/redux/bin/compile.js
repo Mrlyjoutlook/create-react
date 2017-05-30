@@ -22,7 +22,7 @@ const compile = () => {
     .then(() => webpackCompiler(webpackConfig))
     .then(() => {
       console.log(chalk.green('Compiler cpoy file'));
-      fs.copySync(defaultConfig.paths.public, defaultConfig.paths.dist);
+      fs.copySync(defaultConfig.paths.public(), defaultConfig.paths.dist());
     })
     .catch((err) => {
       console.log(chalk.red('Compiler encountered an error.', err));

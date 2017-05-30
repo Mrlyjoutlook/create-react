@@ -5,10 +5,11 @@
   "scripts": {
     "start": "better-npm-run start",
     "dev": "better-npm-run dev",
+    "compile": "better-npm-run compile",
     "deploy": "better-npm-run deploy",
     "deploy:dev": "better-npm-run deploy:dev",
     "deploy:prod": "better-npm-run deploy:prod",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist/*"
   },
   "betterScripts": {
     "dev": {
@@ -26,7 +27,7 @@
       "env": {}
     },
     "deploy": {
-      "command": " npm run clean && npm run compile",
+      "command": "npm run clean && npm run compile",
       "env": {}
     },
     "deploy:dev": {
