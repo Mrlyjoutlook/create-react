@@ -291,4 +291,12 @@ if (defaultConfig.lodashModuleReplacementPlugin.disable) {
   );
 }
 
+//
+if (defaultConfig.vConsolePlugin.disable) {
+  webpackConfig.plugins.psuh(
+    // 移动开发log工具
+    new vConsolePlugin({enable: __DEV__}),
+  );
+}
+
 module.exports = webpackConfig;
