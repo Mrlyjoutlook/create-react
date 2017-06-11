@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { HashRouter as Router, Route } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import { object } from 'prop-types';
 
 class Header extends Component {
   static propTypes = {
@@ -15,7 +13,11 @@ class Header extends Component {
 
   render () {
     return (
-      <div>hello world!!</div>
+      <div>
+        <h1>Creat React App</h1>
+        <div dangerouslySetInnerHTML={{__html: 'react-router 4.x,<br/> webpack 2.x,<br/>'}} />
+        <hr />
+      </div>
     );
   }
 }

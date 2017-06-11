@@ -30,7 +30,9 @@ const config = {
   /**
    * webpack通用配置
    */
-  externals: {},
+  externals: {
+    
+  },
   /**
    * webpack开发环境配置
    */
@@ -39,7 +41,9 @@ const config = {
    * webpack生产环境配置
    */
   compiler_devtool: 'source-map',
-  compiler_resolve_alias: {},
+  compiler_resolve_alias: {
+     lazilyload: path.resolve(__dirname, '../src/utils/lazilyload'),
+  },
   compiler_public_path: '/',
   compiler_stats: {
     chunks: false,
@@ -54,6 +58,7 @@ const config = {
     'react-redux',
     'react-router-dom',
     'redux',
+    'lazilyload',
   ],
 };
 

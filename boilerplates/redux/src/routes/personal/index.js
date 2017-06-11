@@ -5,13 +5,13 @@ import LazilyLoad, { importLazy } from 'lazilyload';
 export default store => match => {
   return (
     <LazilyLoad modules={{
-      Login: () => importLazy(import('./components/LoginContainer')),
+      Personal: () => importLazy(import('./components/PersonalContainer')),
     }}>
-      {({ Login }) => {
-        const reducer = require('./modules/loginReduer').default;
-        injectReducer(store, { key: 'login', reducer });
+      {({ Personal }) => {
+        const reducer = require('./modules/personalReduer').default;
+        injectReducer(store, { key: 'personal', reducer });
         return (
-          <Login />
+          <Personal />
         )
       }}
     </LazilyLoad>
