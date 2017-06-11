@@ -15,6 +15,7 @@ const defaultConfig = require('./default.config');
 
 const __DEV__ = defaultConfig.globals.__DEV__;
 const __PROD__ = defaultConfig.globals.__PROD__;
+const ENCODE = __PROD__ ? 'chunkhash:8' : 'hash:8';
 
 const webpackConfig = {
   target: 'web',
@@ -43,7 +44,7 @@ webpackConfig.entry = {
  * output
  */
 webpackConfig.output = {
-  filename: '[name].[chunkhash:8].js',
+  filename: `[name].[${ENCODE}].js`,
   path: defaultConfig.paths.dist(),
   publicPath: defaultConfig.compiler_public_path,
 };
@@ -295,7 +296,7 @@ if (defaultConfig.lodashModuleReplacementPlugin.disable) {
 if (defaultConfig.vConsolePlugin.disable) {
   webpackConfig.plugins.psuh(
     // 移动开发log工具
-    new vConsolePlugin({enable: __DEV__}),
+    new vConsolePlugin({enable: __DEV__})
   );
 }
 

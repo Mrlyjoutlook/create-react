@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import { object } from 'prop-types';
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import LazilyLoad, { importLazy } from '../utils/lazilyload';
@@ -7,7 +7,7 @@ import LazilyLoad, { importLazy } from '../utils/lazilyload';
 class AppContainer extends Component {
   static propTypes = {
     // routes: PropTypes.object.isRequired,
-    store: PropTypes.object.isRequired,
+    store: object.isRequired,
   }
 
   shouldComponentUpdate () {

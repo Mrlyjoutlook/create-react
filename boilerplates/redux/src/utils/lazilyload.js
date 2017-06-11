@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class LazilyLoad extends React.Component {
 
@@ -53,7 +54,7 @@ class LazilyLoad extends React.Component {
 }
 
 LazilyLoad.propTypes = {
-  children: React.PropTypes.func.isRequired,
+  children: PropTypes.func.isRequired,
 };
 
 export const LazilyLoadFactory = (Component, modules) => {
