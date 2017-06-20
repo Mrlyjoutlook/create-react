@@ -114,7 +114,9 @@ if (__DEV__) {
     new ManifestPlugin({
       fileName: 'manifest.json',
       basePath: defaultConfig.paths.dist(),
-    })
+    }),
+    // webpack 3.0.0 范围提升（Scope Hoisting）
+    new webpack.optimize.ModuleConcatenationPlugin()
   );
 }
 

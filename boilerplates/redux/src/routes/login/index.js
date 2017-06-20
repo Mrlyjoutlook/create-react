@@ -5,7 +5,7 @@ import LazilyLoad, { importLazy } from 'lazilyload';
 export default store => match => {
   return (
     <LazilyLoad modules={{
-      Login: () => importLazy(import('./components/LoginContainer')),
+      Login: () => importLazy(import(/* webpackChunkName: "book-list-modals-X" */ './components/LoginContainer')),
     }}>
       {({ Login }) => {
         const reducer = require('./modules/loginReduer').default;
