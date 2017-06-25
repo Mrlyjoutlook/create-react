@@ -5,7 +5,7 @@ import LazilyLoad, { importLazy } from 'lazilyload';
 export default store => match => {
   return (
     <LazilyLoad modules={{
-      Personal: () => importLazy(import('./components/PersonalContainer')),
+      Personal: () => importLazy(import(/* webpackChunkName: "personal" */ './components/PersonalContainer')),
     }}>
       {({ Personal }) => {
         const reducer = require('./modules/personalReduer').default;

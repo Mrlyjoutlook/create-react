@@ -30,9 +30,9 @@ const config = {
   /**
    * webpack通用配置
    */
-  externals: {
-    
-  },
+  externals: {},
+  resolve_extensions: ['.js', 'ts', '.jsx', '.json'],
+  resolve_alias: {},
   /**
    * webpack开发环境配置
    */

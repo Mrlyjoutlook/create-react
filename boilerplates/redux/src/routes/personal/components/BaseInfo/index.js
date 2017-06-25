@@ -14,5 +14,5 @@ class BaseInfo extends Component {
 }
 
 export default LazilyLoadFactory(BaseInfo, {
-  baseInfoItem: () => import('../BaseInfoItem'),
+  baseInfoItem: () => import( /* webpackChunkName: "baseInfo" */ '../BaseInfoItem'),
 });

@@ -17,20 +17,16 @@ const __DEV__ = defaultConfig.globals.__DEV__;
 const __PROD__ = defaultConfig.globals.__PROD__;
 const ENCODE = __PROD__ ? 'chunkhash:8' : 'hash:8';
 
+/**
+ * base 基础配置
+ */
 const webpackConfig = {
   target: 'web',
-  resolve: {
-    extensions: ['.js', '.jsx', '.json'],
-    alias: defaultConfig.compiler_resolve_alias,
-  },
+  devtool: __DEV__ ? defaultConfig.dev_devtool : defaultConfig.compiler_devtool,
   module: {},
 };
 /**
- * devtool
- */
-webpackConfig.devtool = __DEV__ ? defaultConfig.dev_devtool : defaultConfig.compiler_devtool;
-/**
- * entry
+ * entry 入口配置
  */
 const APP_ENTRY = defaultConfig.paths.client('index.js');
 
@@ -41,22 +37,37 @@ webpackConfig.entry = {
   vendor: defaultConfig.compiler_vendors,
 };
 /**
- * output
+ * output 输出配置
  */
 webpackConfig.output = {
+  chunkFilename: `[name].[${ENCODE}].chunk.js`,
   filename: `[name].[${ENCODE}].js`,
   path: defaultConfig.paths.dist(),
   publicPath: defaultConfig.compiler_public_path,
 };
 /**
- * externals
+ * resolve 解析
  */
-webpackConfig.externals = defaultConfig.externals;
+webpackConfig.resolve = {
+  extensions: defaultConfig.resolve_extensions,
+  alias: ((obj) => {
+    let result = {};
+    const keys = object.keys(obj);
+    keys.map((item, i) => {
+      result[item] = path.resolve(__dirname, obj[item]);
+    })
+    return result;
+  })(defaultConfig.compiler_resolve_alias),
+};
+  /**
+   * externals 外部扩展
+   */
+  webpackConfig.externals = defaultConfig.externals;
 webpackConfig.externals['react/lib/ExecutionEnvironment'] = true;
 webpackConfig.externals['react/lib/ReactContext'] = true;
 webpackConfig.externals['react/addons'] = true;
 /**
- * plugins
+ * plugins 插件
  */
 webpackConfig.plugins = [
   new webpack.DefinePlugin(defaultConfig.globals),
@@ -146,20 +157,23 @@ webpackConfig.plugins.push(
   })
 );
 /**
- * module.rules
+ * module 模块
  */
+
 // javascript loaders
 webpackConfig.module.rules = [{
   test: /\.(js|jsx)$/,
   use: ['happypack/loader?id=js'],
   exclude: /node_modules/,
 }];
+
 // eslint loaders
 // webpackConfig.module.rules.push({
 //   test: /\.(js|jsx)$/,
 //   enforce: 'pre',
 //   use: 'eslint-loader',
 // });
+
 // style-css loaders
 webpackConfig.module.rules.push({
   test: /\.css$/,
@@ -176,6 +190,7 @@ webpackConfig.module.rules.push({
     loader: 'postcss-loader',
   }],
 });
+
 // style-less loaders
 webpackConfig.module.rules.push({
   test: /\.less$/,
@@ -195,6 +210,7 @@ webpackConfig.module.rules.push({
     },
   }],
 });
+
 // style-sass loaders
 webpackConfig.module.rules.push({
   test: /\.scss$/,
@@ -211,6 +227,7 @@ webpackConfig.module.rules.push({
     loader: 'postcss-loader',
   }],
 });
+
 // file loaders
 webpackConfig.module.rules.push(
   { test: /\.woff(\?.*)?$/, loader: ['url?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff'] },
@@ -223,7 +240,7 @@ webpackConfig.module.rules.push(
   { test: /\.(flv|mp4)$/, use: ['file-loader'] }
 );
 
-// gizp
+// gizp （需在生产环境才能启动）
 if (__PROD__ && defaultConfig.gizp.disable) {
   webpackConfig.plugins.push(
     new CompressionPlugin({
@@ -235,7 +252,8 @@ if (__PROD__ && defaultConfig.gizp.disable) {
     })
   );
 }
-// extractTextPlugin
+
+// extractTextPlugin （需在生产环境才能启动）
 if (__PROD__ && defaultConfig.extractTextPlugin.disable) {
   webpackConfig.module.loaders.filter(loader => loader.test.toString.indexOf('ss') !== -1)
     .forEach((rule) => {
@@ -257,7 +275,7 @@ if (__PROD__ && defaultConfig.extractTextPlugin.disable) {
   );
 }
 
-// htmlWebpackPlugin
+// htmlWebpackPlugin （需在生产环境才能启动）
 if (__PROD__ && defaultConfig.htmlWebpackPlugin.disable) {
   if (typeof defaultConfig.htmlWebpackPlugin.config === 'Object') {
     webpackConfig.plugins.push(
@@ -294,11 +312,11 @@ if (defaultConfig.lodashModuleReplacementPlugin.disable) {
   );
 }
 
-//
+// vConsolePlugin
 if (defaultConfig.vConsolePlugin.disable) {
   webpackConfig.plugins.psuh(
     // 移动开发log工具
-    new vConsolePlugin({enable: __DEV__})
+    new vConsolePlugin({ enable: __DEV__ })
   );
 }
 

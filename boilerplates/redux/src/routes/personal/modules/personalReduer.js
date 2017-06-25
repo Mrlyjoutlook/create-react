@@ -1,5 +1,5 @@
 const initialState = {
-  name: mrlyj
+  name: 'mrlyj'
 }
 
 export default function personalReduer(state = initialState, action) {
