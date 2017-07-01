@@ -8,40 +8,22 @@ const pkg = require('../package.json');
 const chalk = require('chalk');
 
 const config = {
-  /**
-   * 应用环境
-   */
   env: process.env.NODE_ENV || 'development',
-  /**
-   * dir目录
-   */
   path_base: path.resolve(__dirname, '..'),
   dir_client: 'src',
   dir_dist: 'dist',
   dir_public: 'public',
   dir_server: 'server',
   dir_mock: 'mock',
-  /**
-   * ip和端口设置
-   */
   server_host: ip.address(),
   server_port: process.env.PORT || 3000,
   mockServer_prot: 3001,
-  /**
-   * webpack通用配置
-   */
   externals: {},
-  resolve_extensions: ['.js', 'ts', '.jsx', '.json'],
+  resolve_extensions: ['.js', '.ts', '.jsx', '.json'],
   resolve_alias: {
     lazilyload: '../src/utils/lazilyload',
   },
-  /**
-   * webpack开发环境配置
-   */
   dev_devtool: 'cheap-module-eval-source-map',
-  /**
-   * webpack生产环境配置
-   */
   compiler_devtool: 'source-map',
   compiler_public_path: '/',
   compiler_stats: {
@@ -49,9 +31,7 @@ const config = {
     chunkModules: false,
     colors: true,
   },
-  compiler_entry: [
-
-  ],
+  compiler_entry: [],
   compiler_vendors: [
     'react',
     'react-redux',
@@ -76,9 +56,9 @@ config.paths = {
   dist: base.bind(null, config.dir_dist),
 };
 /**
-   * 配置环境
-   * globals 会配置到webpack.DefinePlugin中
-   */
+ * 配置环境
+ * globals 会配置到webpack.DefinePlugin中
+ */
 config.globals = {
   'process.env.NODE_ENV': JSON.stringify(config.env),
   'NODE_ENV': config.env,
@@ -136,6 +116,8 @@ config.vConsolePlugin = {
  */
 config.compiler_vendors = config.compiler_vendors.filter((dep) => {
   if (pkg.dependencies[dep]) {
+    return true;
+  } else if (object.keys(config.resolve_alias).indexOf(dep) !== -1) {
     return true;
   } else {
     console.log(chalk.yellow('waring：默认配置中的compiler_vendors所需的依赖缺失！'));

@@ -59,10 +59,10 @@ webpackConfig.resolve = {
     return result;
   })(defaultConfig.compiler_resolve_alias),
 };
-  /**
-   * externals 外部扩展
-   */
-  webpackConfig.externals = defaultConfig.externals;
+/**
+ * externals 外部扩展
+ */
+webpackConfig.externals = defaultConfig.externals;
 webpackConfig.externals['react/lib/ExecutionEnvironment'] = true;
 webpackConfig.externals['react/lib/ReactContext'] = true;
 webpackConfig.externals['react/addons'] = true;
