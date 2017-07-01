@@ -117,7 +117,7 @@ config.vConsolePlugin = {
 config.compiler_vendors = config.compiler_vendors.filter((dep) => {
   if (pkg.dependencies[dep]) {
     return true;
-  } else if (object.keys(config.resolve_alias).indexOf(dep) !== -1) {
+  } else if (Object.keys(config.resolve_alias).indexOf(dep) !== -1) {
     return true;
   } else {
     console.log(chalk.yellow('waring：默认配置中的compiler_vendors所需的依赖缺失！'));

@@ -33,9 +33,9 @@ class AppContainer extends Component {
             <hr />
             <Switch>
               <Route exact path="/" component={Header} />
-              <Route path="/login" render={login(store)} />
-              <Route path="/personal" render={personal(store)} />
-              <Route render={() => { return (<h1>Not Found</h1>) }} />
+              <Route path="/login" component={login(store)} />
+              <Route path="/personal" component={personal(store)} />
+              <Route render={(match) => { return (<h1>Not Found</h1>) }} />
             </Switch>
           </div>
         </Router>

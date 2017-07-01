@@ -8,6 +8,7 @@ export default store => match => {
       Personal: () => importLazy(import(/* webpackChunkName: "personal" */ './components/PersonalContainer')),
     }}>
       {({ Personal }) => {
+        console.log('Personal',Personal)
         const reducer = require('./modules/personalReduer').default;
         injectReducer(store, { key: 'personal', reducer });
         return (

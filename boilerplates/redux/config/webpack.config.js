@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 const argv = require('yargs').argv;
 const webpack = require('webpack');
 const cssnano = require('cssnano');
@@ -51,13 +52,14 @@ webpackConfig.output = {
 webpackConfig.resolve = {
   extensions: defaultConfig.resolve_extensions,
   alias: ((obj) => {
+    console.log(obj)
     let result = {};
-    const keys = object.keys(obj);
+    const keys = Object.keys(obj);
     keys.map((item, i) => {
       result[item] = path.resolve(__dirname, obj[item]);
     })
     return result;
-  })(defaultConfig.compiler_resolve_alias),
+  })(defaultConfig.resolve_alias),
 };
 /**
  * externals 外部扩展
