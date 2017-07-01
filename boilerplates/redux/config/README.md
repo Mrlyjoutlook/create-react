@@ -1,5 +1,9 @@
 # create-app webpack配置文件
 
+# update logs
+- 2017.06.25 完善配置文档
+- 2017.06.24 升级webpack 3.x
+
 ## table
 
 |Name|Description|Type|Default|

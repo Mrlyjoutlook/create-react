@@ -32,7 +32,9 @@ const config = {
    */
   externals: {},
   resolve_extensions: ['.js', 'ts', '.jsx', '.json'],
-  resolve_alias: {},
+  resolve_alias: {
+    lazilyload: '../src/utils/lazilyload',
+  },
   /**
    * webpack开发环境配置
    */
@@ -41,9 +43,6 @@ const config = {
    * webpack生产环境配置
    */
   compiler_devtool: 'source-map',
-  compiler_resolve_alias: {
-     lazilyload: path.resolve(__dirname, '../src/utils/lazilyload'),
-  },
   compiler_public_path: '/',
   compiler_stats: {
     chunks: false,
