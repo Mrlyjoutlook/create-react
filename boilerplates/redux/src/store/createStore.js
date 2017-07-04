@@ -1,6 +1,5 @@
 import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
-// import { browserHistory } from 'react-router';
 import makeRootReducer from './reducers';
 
 export default (initialState = {}) => {
@@ -28,6 +27,7 @@ export default (initialState = {}) => {
       ...enhancers,
     ),
   );
+  
   store.asyncReducers = {};
 
   if (module.hot) {

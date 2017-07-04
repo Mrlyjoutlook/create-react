@@ -10,8 +10,7 @@ const store = createStore(initialState);
 // Render Setup
 const MOUNT_NODE = document.getElementById('root');
 
-let render = () => {
-  // const routes = require('./routes/index').default(store);
+let render = () => {;
   ReactDOM.render(<AppContainer store={store} />, MOUNT_NODE);
 };
 
@@ -42,4 +41,5 @@ if (__DEV__) {
   }
 }
 
+// start
 render();

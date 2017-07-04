@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import Header from '../components/Header';
 
 import LoginRoute from '../routes/login';
-import personal from '../routes/personal';
+import PersonalRoute from '../routes/personal';
 
 class AppContainer extends Component {
   static propTypes = {
@@ -33,9 +33,9 @@ class AppContainer extends Component {
             <hr />
             <Switch>
               <Route exact path="/" component={Header} />
-              <LoginRoute path="/login" />
-              <Route path="/personal" component={personal(store)} />
-              <Route render={(match) => { return (<h1>Not Found</h1>) }} />
+              <LoginRoute path="/login" store={store} />
+              <PersonalRoute path="/personal" store={store} />
+              <Route render={({match}) => { return <h1>Not Found</h1> }} />
             </Switch>
           </div>
         </Router>

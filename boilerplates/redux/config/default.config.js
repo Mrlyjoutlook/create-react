@@ -35,8 +35,10 @@ const config = {
   compiler_vendors: [
     'react',
     'react-redux',
+    'react-dom',
     'react-router-dom',
     'redux',
+    'redux-thunk',
     'lazilyload',
   ],
 };

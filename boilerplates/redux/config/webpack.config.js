@@ -310,7 +310,7 @@ if (__PROD__ && defaultConfig.htmlWebpackPlugin.disable) {
 if (defaultConfig.lodashModuleReplacementPlugin.disable) {
   webpackConfig.plugins.push(
     // lodash 工具库按需使用插件
-    new LodashModuleReplacementPlugin(defaultConfig.LodashModuleReplacementPlugin.config)
+    new LodashModuleReplacementPlugin(defaultConfig.lodashModuleReplacementPlugin.config)
   );
 }
 
