@@ -4,7 +4,7 @@ import { HashRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import Header from '../components/Header';
 
-import login from '../routes/login';
+import LoginRoute from '../routes/login';
 import personal from '../routes/personal';
 
 class AppContainer extends Component {
@@ -33,7 +33,7 @@ class AppContainer extends Component {
             <hr />
             <Switch>
               <Route exact path="/" component={Header} />
-              <Route path="/login" component={login(store)} />
+              <LoginRoute path="/login" />
               <Route path="/personal" component={personal(store)} />
               <Route render={(match) => { return (<h1>Not Found</h1>) }} />
             </Switch>

@@ -2,20 +2,17 @@ import React from 'react';
 import { injectReducer } from '../../store/reducers';
 import LazilyLoad, { importLazy } from 'lazilyload';
 
-export default store => match => {
-  return (
-    <LazilyLoad modules={{
+export default store => ({match}) => (
+  <LazilyLoad modules={{
       Personal: () => importLazy(import(/* webpackChunkName: "personal" */ './components/PersonalContainer')),
     }}>
       {({ Personal }) => {
-        console.log('Personal',Personal)
         const reducer = require('./modules/personalReduer').default;
         injectReducer(store, { key: 'personal', reducer });
         return (
           <Personal />
         )
       }}
-    </LazilyLoad>
-  )
-}
+  </LazilyLoad>
+)
 
