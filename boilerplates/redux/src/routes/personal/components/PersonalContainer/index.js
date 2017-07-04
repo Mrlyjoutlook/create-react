@@ -7,22 +7,31 @@ class PersonalContainer extends Component {
   }
 
   state = {
-      visible: false
+      visible: false,
+      Comp: ()=>{}
   }
 
   handleOnClick = () => {
+      // import( /* webpackChunkName: "baseInfo" */ '../BaseInfoItem').then(
+      //   Comp => {
+      //     this.setState({
+      //       visible: true,
+      //       Comp: Comp.default
+      //     },()=>{console.log('aa')})
+      //   }
+      // )
       this.setState({
-          visible: true
+            visible: true
       })
   }
 
   render () {
-    const { visible } = this.state;
+    const { visible, Comp } = this.state;
 
     return (
       <div>
-        <h1>下面为点击加载组件</h1>
-        <div onClick={this.handleOnClick}>点击加载baseInfo</div>
+        <h2>eg: Click add component</h2>
+        <div style={{ width:200, height:20, background: '#000', color: '#fff', textAlign: 'center'}} onClick={this.handleOnClick}>click baseInfo component</div>
         { visible && <BaseInfo/> }
       </div>
     );

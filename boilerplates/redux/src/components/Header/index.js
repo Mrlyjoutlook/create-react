@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import { object } from 'prop-types';
 
 class Header extends Component {
-  static propTypes = {
-    // routes: PropTypes.object.isRequired,
-    // store: PropTypes.object.isRequired,
-  }
 
   shouldComponentUpdate () {
     return false;
@@ -15,7 +11,7 @@ class Header extends Component {
     return (
       <div>
         <h1>Creat React App</h1>
-        <div dangerouslySetInnerHTML={{__html: 'react-router 4.x,<br/> webpack 2.x,<br/>'}} />
+        <div dangerouslySetInnerHTML={{__html: 'react-router 4.x,<br/> webpack 3.x,<br/>'}} />
         <hr />
       </div>
     );

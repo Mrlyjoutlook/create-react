@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { LazilyLoadFactory } from 'lazilyload';
+import { LazilyLoadFactory, importLazy } from 'lazilyload';
 
 class BaseInfo extends Component {
   render() {
-    const {BaseInfoItem} = this.props.baseInfoItem;
+    const {BaseInfoItem} = this.props;
     return (
       <div>
-        <h2>该组件加载其依赖</h2>
+        <h2>Component add ok!</h2>
         <BaseInfoItem/>
       </div>
     )
@@ -14,5 +14,6 @@ class BaseInfo extends Component {
 }
 
 export default LazilyLoadFactory(BaseInfo, {
-  baseInfoItem: () => import( /* webpackChunkName: "baseInfo" */ '../BaseInfoItem'),
+  BaseInfoItem: () => importLazy(import( /* webpackChunkName: "baseInfo" */ '../BaseInfoItem'))
 });
+

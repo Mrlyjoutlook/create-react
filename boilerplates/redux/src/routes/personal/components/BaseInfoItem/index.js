@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function BaseInfoItem () {
+export default function BaseInfoItem () {
     return (
         <div>
             <span>name:</span>
