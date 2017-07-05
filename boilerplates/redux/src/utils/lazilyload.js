@@ -58,12 +58,47 @@ LazilyLoad.propTypes = {
 };
 
 export const LazilyLoadFactory = (Component, modules) => {
-  return props => (
-    <LazilyLoad modules={modules}>
-      {mods => <Component {...mods} {...props} />}
-    </LazilyLoad>
-  );
+  return function LazilyLoadFactory (props) {
+    return (
+      <LazilyLoad modules={modules}>
+        {mods => <Component {...mods} {...props} />}
+      </LazilyLoad>
+    )
+  };
 };
+
+export const lazilyLoadComponent = loadComponent => (
+  class LazilyLoadComponent extends React.Component {
+    state = {
+      Component: null,
+    }
+
+    componentWillMount() {
+      if (this.hasLoadedComponent()) {
+        return;
+      }
+
+      loadComponent()
+        .then(module => module.default)
+        .then(Component => {
+          this.setState({Component});
+        })
+        .catch(err => {
+          console.error(`Cannot load component in <LazilyLoadComponent />`);
+          throw err;
+        })
+    }
+
+    hasLoadedComponent() {
+      return this.state.Component !== null;
+    }
+
+    render() {
+      const { Component } = this.state;
+      return Component && <Component {...this.props} />;
+    }
+  }
+)
 
 export const importLazy = promise => (
   promise.then(result => result.default)

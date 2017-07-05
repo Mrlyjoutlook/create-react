@@ -7,6 +7,6 @@ create react project engineer
 - - Redux
 - - Dva
 - - Mobox
-- Webpack 2.x
+- Webpack 3.x
 
 # First

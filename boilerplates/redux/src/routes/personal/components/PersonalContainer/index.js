@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { object } from 'prop-types';
 import BaseInfo from '../BaseInfo';
+import { lazilyLoadComponent } from 'lazilyload';
 
 class PersonalContainer extends Component {
   static propTypes = {
@@ -8,21 +9,17 @@ class PersonalContainer extends Component {
 
   state = {
       visible: false,
-      Comp: ()=>{}
   }
 
   handleOnClick = () => {
-      // import( /* webpackChunkName: "baseInfo" */ '../BaseInfoItem').then(
-      //   Comp => {
-      //     this.setState({
-      //       visible: true,
-      //       Comp: Comp.default
-      //     },()=>{console.log('aa')})
-      //   }
-      // )
       this.setState({
             visible: true
       })
+  }
+
+  asyncComponent = () => {
+    const OtherInfo = lazilyLoadComponent(() => import( /* webpackChunkName: "OtherInfo" */ '../OtherInfo'))
+    return <OtherInfo/>
   }
 
   render () {
@@ -32,7 +29,8 @@ class PersonalContainer extends Component {
       <div>
         <h2>eg: Click add component</h2>
         <div style={{ width:200, height:20, background: '#000', color: '#fff', textAlign: 'center'}} onClick={this.handleOnClick}>click baseInfo component</div>
-        { visible && <BaseInfo/> }
+        {visible && <BaseInfo/>}
+        {visible && this.asyncComponent()}
       </div>
     );
   }
