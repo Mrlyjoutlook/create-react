@@ -10,7 +10,7 @@ const store = createStore(initialState);
 // Render Setup
 const MOUNT_NODE = document.getElementById('root');
 
-let render = () => {;
+let render = () => {
   ReactDOM.render(<AppContainer store={store} />, MOUNT_NODE);
 };
 
