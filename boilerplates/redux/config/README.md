@@ -23,8 +23,8 @@
 |compiler_public_path|生产环境编译后的相对路径|String|`'/'`|
 |compiler_entry|||
 |compiler_vendors|生产环境公共代码提取配置|Array||
+|globals|全局变量，会配置到webpack.DefinePlugin中|Object|请查看default.config.js|
+|extractTextPlugin|extract-text-webpack-plugin插件，disable: 是否启用，config: 插件的配置|Objec[boolben, object]|{disable：false, config: {}}|
+|htmlWebpackPlugin|html-webpack-plugin插件，disable: 是否启用，config: 插件的配置|Objec[boolben, object || array ]|{disable：false, config: {} || [] }|
 
 ## config details
-
-
-
