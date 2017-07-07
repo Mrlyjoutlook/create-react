@@ -7,6 +7,8 @@ import Header from '../components/Header';
 import LoginRoute from '../routes/login';
 import PersonalRoute from '../routes/personal';
 
+import '../styles/index.css';
+
 class AppContainer extends Component {
   static propTypes = {
     // routes: PropTypes.object.isRequired,

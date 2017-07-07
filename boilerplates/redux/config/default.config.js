@@ -71,33 +71,33 @@ config.globals = {
  * 应用功能
  */
 config.extractTextPlugin = {
-  disable: false,
+  disable: true,
   config: {
-    publicPath: config.paths.dist,
+    publicPath: config.compiler_public_path,
     filename: 'app.css',
   },
 };
 
+// filename: `${path.join(__dirname, '/../dist/index.html')}`,
+//     template: `${path.join(__dirname, '/../src/template/index.html')}`,
+//     inject: true,
+//     excludeChunks: ['vendor'],
+//     minify: {
+//       removeComments: true, // 移除HTML中的注释
+//       collapseWhitespace: true, // 删除空白符与换行符
+//       removeRedundantAttributes: true,
+//       useShortDoctype: true,
+//       removeEmptyAttributes: true,
+//       removeStyleLinkTypeAttributes: true,
+//       keepClosingSlash: true,
+//       minifyJS: true,
+//       minifyCSS: true,
+//       minifyURLs: true,
+//     }
+
 config.htmlWebpackPlugin = {
   disable: false,
-  config: !this.disable ? {
-    filename: `${path.join(__dirname, '/../dist/index.html')}`,
-    template: `${path.join(__dirname, '/../src/template/index.html')}`,
-    inject: true,
-    excludeChunks: ['vendor'],
-    minify: {
-      removeComments: true, // 移除HTML中的注释
-      collapseWhitespace: true, // 删除空白符与换行符
-      removeRedundantAttributes: true,
-      useShortDoctype: true,
-      removeEmptyAttributes: true,
-      removeStyleLinkTypeAttributes: true,
-      keepClosingSlash: true,
-      minifyJS: true,
-      minifyCSS: true,
-      minifyURLs: true,
-    },
-  } : [],
+  config: {},
 };
 
 config.lodashModuleReplacementPlugin = {

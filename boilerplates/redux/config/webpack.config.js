@@ -2,6 +2,8 @@
 
 const path = require('path');
 const argv = require('yargs').argv;
+const _ = require('lodash');
+const debug = require('debug')('app:webpack.config');
 const webpack = require('webpack');
 const cssnano = require('cssnano');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -53,12 +55,11 @@ webpackConfig.output = {
 webpackConfig.resolve = {
   extensions: defaultConfig.resolve_extensions,
   alias: ((obj) => {
-    console.log(obj)
     let result = {};
     const keys = Object.keys(obj);
-    keys.map((item, i) => {
+    keys.map((item) => {
       result[item] = path.resolve(__dirname, obj[item]);
-    })
+    });
     return result;
   })(defaultConfig.resolve_alias),
 };
@@ -127,7 +128,7 @@ if (__DEV__) {
     // 生产资源映射表
     new ManifestPlugin({
       fileName: 'manifest.json',
-      basePath: defaultConfig.paths.dist(),
+      basePath: `${defaultConfig.paths.dist()}/`,
     }),
     // webpack 3.0.0 范围提升（Scope Hoisting）
     new webpack.optimize.ModuleConcatenationPlugin()
@@ -256,37 +257,49 @@ if (__PROD__ && defaultConfig.gizp.disable) {
   );
 }
 
-// extractTextPlugin （需在生产环境才能启动）
-if (__PROD__ && defaultConfig.extractTextPlugin.disable) {
-  webpackConfig.module.loaders.filter(loader => loader.test.toString.indexOf('ss') !== -1)
-    .forEach((rule) => {
-      const first = rule.use[0];
-      const rest = rule.use.slice(1);
-      rule.user = ExtractTextPlugin.extract({
-        fallback: first,
-        use: rest,
-        publicPath: webpackConfig.paths.dist(),
-      });
+// extractTextPlugin
+if (defaultConfig.extractTextPlugin.disable) {
+  webpackConfig.module.rules.filter(
+    rule => /css|less|scss/.test(rule.test.toString())
+  ).map(item => {
+    const first = item.use[0];
+    const rest = item.use.slice(1);
+    item.use = ExtractTextPlugin.extract({
+      fallback: first,
+      use: rest,
+      publicPath: defaultConfig.extractTextPlugin.config.publicPath,
     });
+  });
 
   webpackConfig.plugins.push(
     new ExtractTextPlugin({
-      filename: webpackConfig.extractTextPlugin.config.filename,
+      filename: defaultConfig.extractTextPlugin.config.filename,
       disable: false,
       allChunks: true,
     })
   );
 }
-
 // htmlWebpackPlugin （需在生产环境才能启动）
-if (__PROD__ && defaultConfig.htmlWebpackPlugin.disable) {
-  if (typeof defaultConfig.htmlWebpackPlugin.config === 'Object') {
+if (defaultConfig.htmlWebpackPlugin.disable) {
+  if (_.isObject(defaultConfig.htmlWebpackPlugin.config)) {
+    if (_.isEmpty(defaultConfig.htmlWebpackPlugin.config)) {
+      debug('htmlWebpackPlugin配置为空！');
+      return false;
+    }
     webpackConfig.plugins.push(
       new HtmlWebpackPlugin(defaultConfig.htmlWebpackPlugin.config)
     );
   }
-  if (typeof defaultConfig.htmlWebpackPlugin.config === 'Array') {
+  if (_.isArray(defaultConfig.htmlWebpackPlugin.config)) {
+    if (_.isEmpty(defaultConfig.htmlWebpackPlugin.config)) {
+      debug('htmlWebpackPlugin配置为空！');
+      return false;
+    }
     for (let i = 0, n = defaultConfig.htmlWebpackPlugin.config.length; i < n; i++) {
+      if (_.isEmpty(defaultConfig.htmlWebpackPlugin.config[i])) {
+        debug(`htmlWebpackPlugin配置中的第${i}元素为空！`);
+        return false;
+      }
       webpackConfig.plugins.push(
         new HtmlWebpackPlugin(defaultConfig.htmlWebpackPlugin.config[i])
       );
@@ -301,7 +314,16 @@ if (__PROD__ && defaultConfig.htmlWebpackPlugin.disable) {
       filename: 'index.html',
       inject: 'body',
       minify: {
-        collapseWhitespace: true,
+        removeComments: true, // 移除HTML中的注释
+        collapseWhitespace: true, // 删除空白符与换行符
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true,
       },
     })
   );
@@ -315,8 +337,8 @@ if (defaultConfig.lodashModuleReplacementPlugin.disable) {
   );
 }
 
-// vConsolePlugin
-if (defaultConfig.vConsolePlugin.disable) {
+// vConsolePlugin(开发环境)
+if (__DEV__ && defaultConfig.vConsolePlugin.disable) {
   webpackConfig.plugins.psuh(
     // 移动开发log工具
     new vConsolePlugin({ enable: __DEV__ })

@@ -15,30 +15,39 @@
     "dev": {
       "command": "nodemon bin/dev-server --ignore dist --ignore public --ignore src",
       "env": {
+        "DEBUG": "app:*",
         "NODE_ENV": "development"
       }
     },
     "start": {
       "command": "node bin/dev-server",
-      "env": {}
+      "env": {
+        "DEBUG": "app:*"
+      }
     },
     "compile": {
       "command": "node bin/compile",
-      "env": {}
+      "env": {
+        "DEBUG": "app:*"
+      }
     },
     "deploy": {
       "command": "npm run clean && npm run compile",
-      "env": {}
+      "env": {
+        "DEBUG": "app:*"
+      }
     },
     "deploy:dev": {
       "command": "npm run deploy",
       "env": {
+        "DEBUG": "app:*",
         "NODE_ENV": "development"
       }
     },
     "deploy:prod": {
       "command": "npm run deploy",
       "env": {
+        "DEBUG": "app:*",
         "NODE_ENV": "production"
       }
     }
@@ -58,6 +67,7 @@
     "compression-webpack-plugin": "^0.4.0",
     "css-loader": "^0.28.1",
     "cssnano": "^3.10.0",
+    "debug": "^2.6.8",
     "eslint": "^4.1.1",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-loader": "^1.7.1",
@@ -94,6 +104,7 @@
   "author": "mrlyj",
   "license": "ISC",
   "dependencies": {
+    "lodash": "^4.17.4",
     "normalize.css": "^7.0.0",
     "prop-types": "^15.5.8",
     "react": "^15.5.4",
