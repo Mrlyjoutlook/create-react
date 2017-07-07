@@ -52,7 +52,7 @@ function base() {
 }
 
 config.paths = {
-  base: base,
+  base,
   client: base.bind(null, config.dir_client),
   public: base.bind(null, config.dir_public),
   dist: base.bind(null, config.dir_dist),
@@ -107,12 +107,12 @@ config.lodashModuleReplacementPlugin = {
 
 config.gizp = {
   disable: false,
-  config: {}
-}
+  config: {},
+};
 
 config.vConsolePlugin = {
   disable: false,
-}
+};
 /**
  * 校验默认配置中所需要的依赖是否存在
  */
@@ -122,7 +122,7 @@ config.compiler_vendors = config.compiler_vendors.filter((dep) => {
   } else if (Object.keys(config.resolve_alias).indexOf(dep) !== -1) {
     return true;
   } else {
-    console.log(chalk.yellow('waring：默认配置中的compiler_vendors所需的依赖缺失！'));
+    console.log(chalk.yellow('waring: 默认配置中的compiler_vendors所需的依赖缺失！'));
   }
 });
 

@@ -4,7 +4,7 @@ import createStore from './store/createStore';
 import AppContainer from './containers/AppContainer';
 
 // init state
-const initialState = window.___INITIAL_STATE__;
+const initialState = window.__INITIAL_STATE__;
 const store = createStore(initialState);
 
 // Render Setup

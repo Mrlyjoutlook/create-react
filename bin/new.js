@@ -34,9 +34,9 @@ if (!arg) {
             }
         ]
     }
-    ]).then(function (answers) {
+    ]).then(function (firstAnswers) {
         const dest = path.join(process.cwd(), arg);
-        const cwd = path.join(__dirname, '../boilerplates/', answers.react);
+        const cwd = path.join(__dirname, '../boilerplates/', firstAnswers.react);
         mkdirpSync(dest);
         vfs.src(['**/*', '!node_modules/**/*'], {cwd: cwd, cwdbase: true, dot: true})
         .pipe(vfs.dest(dest))

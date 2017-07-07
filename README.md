@@ -1,6 +1,20 @@
 # Create-React
 create react project engineer
 
+# Use
+
+```
+# Install
+$ npm i create-react -g
+
+# Create app
+$ peak new myapp
+
+# Start app
+$ cd myapp
+$ npm start
+```
+
 # Features
 - React-Router 4
 - Boilerplates

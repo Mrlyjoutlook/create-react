@@ -11,8 +11,9 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const HappyPack = require('happypack');
 const os = require('os');
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
-const CompressionPlugin = require("compression-webpack-plugin");
+const CompressionPlugin = require('compression-webpack-plugin');
 const defaultConfig = require('./default.config');
+const vConsolePlugin = require('vconsole-webpack-plugin');
 
 const __DEV__ = defaultConfig.globals.__DEV__;
 const __PROD__ = defaultConfig.globals.__PROD__;
@@ -79,7 +80,7 @@ webpackConfig.plugins = [
     loaders: ['babel-loader'],
     threadPool: happyThreadPool,
     cache: true,
-    verbose: true
+    verbose: true,
   })
 ];
 
@@ -239,18 +240,18 @@ webpackConfig.module.rules.push(
   { test: /\.eot(\?.*)?$/, loader: ['file?prefix=fonts/&name=[path][name].[ext]'] },
   { test: /\.svg(\?.*)?$/, loader: ['url?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=image/svg+xml'] },
   { test: /\.(png|jpg|gif)$/, use: ['url-loader?limit=8192'] },
-  { test: /\.(flv|mp4)$/, use: ['file-loader'] }
+  { test: /\.(flv|mp4)$/, use: ['file-loader'] },
 );
 
 // gizp （需在生产环境才能启动）
 if (__PROD__ && defaultConfig.gizp.disable) {
   webpackConfig.plugins.push(
     new CompressionPlugin({
-      asset: "[path].gz[query]",
-      algorithm: "gzip",
+      asset: '[path].gz[query]',
+      algorithm: 'gzip',
       test: /\.(js|html)$/,
       threshold: 10240,
-      minRatio: 0.8
+      minRatio: 0.8,
     })
   );
 }
