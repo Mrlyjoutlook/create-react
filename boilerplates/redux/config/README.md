@@ -31,10 +31,11 @@
 
 ### htmlWebpackPlugin
 *disable*  
+
 默认值为false，表示该插件自定义的配置不启用，但webpack在编译的过程中同样会使用该插件，且该默认配置的template值为`/src/index.html`
 
 *config*  
-- object
--- 详细配置请查看[html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin)
+-   object  
+    详细配置请查看[html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin)
 - array
 -- 多页面的配置（多个html），该数组中的每个元素为`html-webpack-plugin`插件配置。备注：在开发多页面过程中记得处理好相对应的js依赖，可以利用`html-webpack-plugin`中`excludeChunks`和`includeChunks`处理那些是所需要的依赖。
