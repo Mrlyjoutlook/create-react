@@ -2,9 +2,18 @@
 a redux boilerplates!
 
 # Use
-`npm i` / `yarn install` 安装所需依赖  
-`npm start` or `npm run dev` / `yarn start` or `yarn run dev` 启动程序，其中`npm run dev`修改除`/src`外的文件会重启
-`npm run deploy:prod` / `yarn add deploy:prod` 打包代码，生成`/dist`
+
+```
+# 安装所需依赖
+npm i / yarn install
+
+# 启动程序，其中npm run dev修改除/src外的文件会重启
+npm start or npm run dev / yarn start or yarn run dev
+
+# 打包代码，生成/dist
+npm run deploy:prod / yarn add deploy:prod
+
+```
 
 # Features
 - React
