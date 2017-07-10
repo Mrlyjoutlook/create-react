@@ -13,6 +13,9 @@ npm start or npm run dev / yarn start or yarn run dev
 # 打包代码，生成/dist
 npm run deploy:prod / yarn add deploy:prod
 
+# 启动模拟数据
+npm run mock / yarn add mock
+
 ```
 
 # Features
