@@ -6,6 +6,7 @@
     "start": "better-npm-run start",
     "dev": "better-npm-run dev",
     "compile": "better-npm-run compile",
+    "mock": "better-npm-run mock",
     "deploy": "better-npm-run deploy",
     "deploy:dev": "better-npm-run deploy:dev",
     "deploy:prod": "better-npm-run deploy:prod",
@@ -30,6 +31,10 @@
       "env": {
         "DEBUG": "app:*"
       }
+    },
+    "mock": {
+      "command": "cd mock && node mockServer",
+      "env": {}
     },
     "deploy": {
       "command": "npm run clean && npm run compile",

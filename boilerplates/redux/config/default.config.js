@@ -17,7 +17,7 @@ const config = {
   dir_mock: 'mock',
   server_host: ip.address(),
   server_port: process.env.PORT || 3000,
-  mockServer_prot: 3001,
+  mockServer_prot: process.env.PORT + 1 || 3001,
   externals: {},
   resolve_extensions: ['.js', '.ts', '.jsx', '.json'],
   resolve_alias: {
@@ -81,9 +81,9 @@ config.extractTextPlugin = {
 config.htmlWebpackPlugin = {
   disable: false,
   config: {
-    template: this.paths.client('index.html'),
+    template: config.paths.client('index.html'),
     hash: false,
-    favicon: this.paths.public('favicon.ico'),
+    favicon: config.paths.public('favicon.ico'),
     filename: 'index.html',
     inject: 'body',
     minify: {
