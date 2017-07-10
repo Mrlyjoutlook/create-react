@@ -136,4 +136,4 @@ config.compiler_vendors = config.compiler_vendors.filter((dep) => {
   }
 });
 
-module.exports = Object.assign(config, require('./custom.config'));
+module.exports = config;

@@ -12,10 +12,12 @@ const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const HappyPack = require('happypack');
 const os = require('os');
-const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 const CompressionPlugin = require('compression-webpack-plugin');
 const defaultConfig = require('./default.config');
 const vConsolePlugin = require('vconsole-webpack-plugin');
+const NyanProgressPlugin = require('nyan-progress-webpack-plugin');
+
+const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
 const __DEV__ = defaultConfig.globals.__DEV__;
 const __PROD__ = defaultConfig.globals.__PROD__;
@@ -82,7 +84,9 @@ webpackConfig.plugins = [
     threadPool: happyThreadPool,
     cache: true,
     verbose: true,
-  })
+  }),
+  // 进度条样式插件
+  new NyanProgressPlugin()
 ];
 
 if (__DEV__) {

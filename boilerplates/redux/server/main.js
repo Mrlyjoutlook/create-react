@@ -9,7 +9,9 @@ const proxy = require('http-proxy-middleware');
 // const Dashboard = require('webpack-dashboard');
 // const DashboardPlugin = require('webpack-dashboard/plugin');
 
-// const dashboard = new Dashboard();
+// const dashboard = new Dashboard({
+//   color: 'magenta',
+// });
 
 const app = express();
 app.use(compress());
@@ -25,7 +27,7 @@ if (defaultConfig.env === 'development') {
     hot: true,
     quiet: false,
     historyApiFallback: true,
-    noInfo: false,
+    noInfo: true,
     lazy: false,
     stats: {
       chunks: false,
