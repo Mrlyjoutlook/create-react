@@ -117,6 +117,7 @@ if (__DEV__) {
         screw_ie8: true,
       },
     }),
+    // 去除重复模块依赖
     new webpack.optimize.AggressiveMergingPlugin(),
     // 提取共享的依赖
     new webpack.optimize.CommonsChunkPlugin({
@@ -247,13 +248,7 @@ webpackConfig.module.rules.push(
 // gizp （需在生产环境才能启动）
 if (__PROD__ && defaultConfig.gizp.disable) {
   webpackConfig.plugins.push(
-    new CompressionPlugin({
-      asset: '[path].gz[query]',
-      algorithm: 'gzip',
-      test: /\.(js|html)$/,
-      threshold: 10240,
-      minRatio: 0.8,
-    })
+    new CompressionPlugin(defaultConfig.gizp.config)
   );
 }
 
@@ -307,25 +302,7 @@ if (defaultConfig.htmlWebpackPlugin.disable) {
   }
 } else {
   webpackConfig.plugins.push(
-    new HtmlWebpackPlugin({
-      template: defaultConfig.paths.client('index.html'),
-      hash: false,
-      favicon: defaultConfig.paths.public('favicon.ico'),
-      filename: 'index.html',
-      inject: 'body',
-      minify: {
-        removeComments: true, // 移除HTML中的注释
-        collapseWhitespace: true, // 删除空白符与换行符
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true,
-      },
-    })
+    new HtmlWebpackPlugin(defaultConfig.htmlWebpackPlugin.config)
   );
 }
 

@@ -78,36 +78,46 @@ config.extractTextPlugin = {
   },
 };
 
-// filename: `${path.join(__dirname, '/../dist/index.html')}`,
-//     template: `${path.join(__dirname, '/../src/template/index.html')}`,
-//     inject: true,
-//     excludeChunks: ['vendor'],
-//     minify: {
-//       removeComments: true, // 移除HTML中的注释
-//       collapseWhitespace: true, // 删除空白符与换行符
-//       removeRedundantAttributes: true,
-//       useShortDoctype: true,
-//       removeEmptyAttributes: true,
-//       removeStyleLinkTypeAttributes: true,
-//       keepClosingSlash: true,
-//       minifyJS: true,
-//       minifyCSS: true,
-//       minifyURLs: true,
-//     }
-
 config.htmlWebpackPlugin = {
   disable: false,
-  config: {},
+  config: {
+    template: this.paths.client('index.html'),
+    hash: false,
+    favicon: this.paths.public('favicon.ico'),
+    filename: 'index.html',
+    inject: 'body',
+    minify: {
+      removeComments: true, // 移除HTML中的注释
+      collapseWhitespace: true, // 删除空白符与换行符
+      removeRedundantAttributes: true,
+      useShortDoctype: true,
+      removeEmptyAttributes: true,
+      removeStyleLinkTypeAttributes: true,
+      keepClosingSlash: true,
+      minifyJS: true,
+      minifyCSS: true,
+      minifyURLs: true,
+    },
+  },
 };
 
 config.lodashModuleReplacementPlugin = {
   disable: false,
-  config: {},
+  config: {
+    collections: true,
+    paths: true,
+  },
 };
 
 config.gizp = {
   disable: false,
-  config: {},
+  config: {
+    asset: '[path].gz[query]',
+    algorithm: 'gzip',
+    test: /\.(js|html)$/,
+    threshold: 10240,
+    minRatio: 0.8,
+  },
 };
 
 config.vConsolePlugin = {
