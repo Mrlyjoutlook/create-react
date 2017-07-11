@@ -5,7 +5,7 @@ create react project engineer
 
 ```
 # Install
-$ npm i create-react -g
+$ npm i create-react-generator -g
 
 # Create app
 $ peak new myapp
