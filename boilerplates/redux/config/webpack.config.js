@@ -111,7 +111,7 @@ if (__DEV__) {
         screw_ie8: true, // React doesn't support IE8
         unused: true,
         dead_code: true,
-        warnings: true,  // uglifyjs 的警告信息
+        warnings: false,  // uglifyjs 的警告信息
       },
       mangle: {
         screw_ie8: true,

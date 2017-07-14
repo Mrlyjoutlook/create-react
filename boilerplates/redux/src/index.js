@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import createStore from './store/createStore';
 import AppContainer from './containers/AppContainer';
 
+// import Perf from 'react-addons-perf'
+// window.Perf = Perf
+
 // init state
 const initialState = window.__INITIAL_STATE__;
 const store = createStore(initialState);

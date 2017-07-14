@@ -71,7 +71,7 @@ config.globals = {
  * 应用功能
  */
 config.extractTextPlugin = {
-  disable: true,
+  disable: false,
   config: {
     publicPath: config.compiler_public_path,
     filename: 'app.css',
