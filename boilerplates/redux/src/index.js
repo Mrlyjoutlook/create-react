@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import createStore from './store/createStore';
-import AppContainer from './containers/AppContainer';
+import App from './containers/App';
 
 // perf
 if (__DEV__) {
@@ -17,7 +17,7 @@ const store = createStore(initialState);
 const MOUNT_NODE = document.getElementById('root');
 
 let render = () => {
-  ReactDOM.render(<AppContainer store={store} />, MOUNT_NODE);
+  ReactDOM.render(<App store={store} />, MOUNT_NODE);
 };
 
 // This code is excluded from production bundle
