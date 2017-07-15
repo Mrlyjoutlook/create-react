@@ -35,6 +35,7 @@ if (!arg) {
         ]
     }
     ]).then(function (firstAnswers) {
+        console.log(firstAnswers)
         const dest = path.join(process.cwd(), arg);
         const cwd = path.join(__dirname, '../boilerplates/', firstAnswers.react);
         mkdirpSync(dest);
