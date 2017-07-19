@@ -1,5 +1,5 @@
 # Create-React/redux
-a redux boilerplates!
+a react redux boilerplates!
 
 # Use
 
