@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { object } from 'prop-types';
 import { HashRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import Header from '../components/Header';
+import Header from '../../components/Header';
 import { loginRoute, personalRoute } from '../../config/routesConfig'
-import LoginRoute from '../routes/login';
-import PersonalRoute from '../routes/personal';
+import LoginRoute from '../../routes/login';
+import PersonalRoute from '../../routes/personal';
 
-import '../styles/index.css';
+import '../../styles/index.css';
 
 class App extends Component {
   static propTypes = {

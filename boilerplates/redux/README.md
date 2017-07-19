@@ -22,6 +22,7 @@ npm run mock / yarn add mock
 - React
 - React-Router 4
 - Redux
+- Redux-Saga
 - Webpack 3.x
 - babel
 - eslint

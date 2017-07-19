@@ -1,17 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import createStore from './store/createStore';
+import rootSaga from './saga';
 import App from './containers/App';
 
 // perf
 if (__DEV__) {
-  import Perf from 'react-addons-perf'
-  window.Perf = Perf
+  window.Perf = require('react-addons-perf')
 }
 
 // init state
 const initialState = window.__INITIAL_STATE__;
-const store = createStore(initialState);
+const { store, runSaga } = createStore(initialState);
+
+// run saga
+runSaga(rootSaga);
 
 // Render Setup
 const MOUNT_NODE = document.getElementById('root');
@@ -38,7 +41,7 @@ if (__DEV__) {
     };
 
     // Setup hot module replacement
-    module.hot.accept('./containers/AppContainer', () =>
+    module.hot.accept('./containers/App', () =>
       setImmediate(() => {
         ReactDOM.unmountComponentAtNode(MOUNT_NODE);
         render();

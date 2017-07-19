@@ -39,6 +39,7 @@ const config = {
     'react-router-dom',
     'redux',
     'redux-thunk',
+    'redux-saga',
     'lazilyload',
   ],
 };
