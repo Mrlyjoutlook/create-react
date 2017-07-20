@@ -6,8 +6,9 @@ import Header from '../../components/Header';
 import { loginRoute, personalRoute } from '../../config/routesConfig'
 import LoginRoute from '../../routes/login';
 import PersonalRoute from '../../routes/personal';
-
 import '../../styles/index.css';
+
+require('normalize.css');
 
 class App extends Component {
   static propTypes = {

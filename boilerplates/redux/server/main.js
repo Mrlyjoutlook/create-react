@@ -27,7 +27,7 @@ if (defaultConfig.env === 'development') {
     hot: true,
     quiet: false,
     historyApiFallback: true,
-    noInfo: true,
+    noInfo: false,
     lazy: false,
     stats: {
       chunks: false,

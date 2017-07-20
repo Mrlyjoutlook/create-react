@@ -1,6 +1,6 @@
 {
   "name": "create-react-generator",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "react generator",
   "author": "mrlyj <mr.lyj@outlook.com>",
   "scripts": {},
@@ -9,7 +9,10 @@
     "boilerplates",
     "react",
     "redux",
-    "react-router"
+    "react-router",
+    "redux-saga",
+    "cli",
+    "spa"
   ],
   "bin": {
     "peak": "./bin/peak.js"
@@ -34,5 +37,8 @@
     "babel-core": "^6.24.1",
     "babel-eslint": "^7.2.1",
     "eslint": "^3.19.0"
+  },
+  "engines": {
+    "node": ">=4.0.0"
   }
 }
