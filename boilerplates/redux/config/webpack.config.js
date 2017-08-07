@@ -6,16 +6,17 @@ const _ = require('lodash');
 const debug = require('debug')('app:webpack.config');
 const webpack = require('webpack');
 const cssnano = require('cssnano');
+const os = require('os');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const HappyPack = require('happypack');
-const os = require('os');
 const CompressionPlugin = require('compression-webpack-plugin');
-const defaultConfig = require('./default.config');
 const vConsolePlugin = require('vconsole-webpack-plugin');
 const NyanProgressPlugin = require('nyan-progress-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const defaultConfig = require('./default.config');
 
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
@@ -96,7 +97,9 @@ if (__DEV__) {
     // 当模块热替换(HMR)时在浏览器控制台输出对用户更友好的模块名字信息
     new webpack.NamedModulesPlugin(),
     // 跳过编译时出错的代码并记录，使编译后运行时的包不会发生错误
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin(),
+    // 包大小分析工具
+    new BundleAnalyzerPlugin()
   );
 } else if (__PROD__) {
   webpackConfig.plugins.push(
@@ -112,6 +115,7 @@ if (__DEV__) {
         unused: true,
         dead_code: true,
         warnings: false,  // uglifyjs 的警告信息
+        pure_funcs: ['console.log'], // 去除代码console.log
       },
       mangle: {
         screw_ie8: true,
