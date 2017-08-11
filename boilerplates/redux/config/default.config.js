@@ -40,8 +40,10 @@ const config = {
     'redux',
     'redux-thunk',
     'redux-saga',
-    'lazilyload',
   ],
+  compiler_common: [
+    'lazilyload',
+  ]
 };
 
 /**
