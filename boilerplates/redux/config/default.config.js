@@ -4,8 +4,9 @@
 const path = require('path');
 const argv = require('yargs').argv;
 const ip = require('ip');
-const pkg = require('../package.json');
 const chalk = require('chalk');
+const pkg = require('../package.json');
+// const configManifest = require('../config-manifest.json');
 
 const config = {
   env: process.env.NODE_ENV || 'development',
@@ -41,7 +42,7 @@ const config = {
     'redux-thunk',
     'redux-saga',
   ],
-  compiler_common: [
+  compiler_commons: [
     'lazilyload',
   ]
 };
@@ -100,7 +101,7 @@ config.htmlWebpackPlugin = {
       minifyJS: true,
       minifyCSS: true,
       minifyURLs: true,
-    },
+    }
   },
 };
 

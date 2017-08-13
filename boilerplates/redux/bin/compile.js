@@ -1,33 +1,22 @@
-const fs = require('fs-extra');
 const webpack = require('webpack');
+const debug = require('debug')('app:bin:compile');
 const webpackConfig = require('../config/webpack.config');
-const defaultConfig = require('../config/default.config');
 const chalk = require('chalk');
+const compile = webpack(webpackConfig);
 
-const webpackCompiler = (config) =>
-  new Promise((resolve, reject) => {
-    const compiler = webpack(config);
-
-    compiler.run((err, stats) => {
-      if (err) {
-        return reject(err);
-      }
-      const jsonStats = stats.toJson();
-      resolve(jsonStats);
-    });
-  });
-
-const compile = () => {
-  return Promise.resolve()
-    .then(() => webpackCompiler(webpackConfig))
-    .then(() => {
-      console.log(chalk.green('Compiler cpoy file'));
-      fs.copySync(defaultConfig.paths.public(), defaultConfig.paths.dist());
-    })
-    .catch((err) => {
-      console.log(chalk.red('Compiler encountered an error.', err));
-      process.exit(1);
-    });
-};
-
-compile();
+compile.run((err, stats) => {
+  if (err) {
+    debug('Webpack compiler encountered a fatal error.', err)
+    return false;
+  }
+  const jsonStats = stats.toJson();
+  if (jsonStats.errors.length > 0) {
+    debug('Webpack compiler encountered errors.')
+    debug(jsonStats.errors.join('\n'))
+  } else if (jsonStats.warnings.length > 0) {
+    debug('Webpack compiler encountered warnings.')
+    debug(jsonStats.warnings.join('\n'))
+  } else {
+    debug('No errors or warnings encountered.')
+  }
+});

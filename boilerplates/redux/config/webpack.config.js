@@ -3,21 +3,21 @@
 const path = require('path');
 const argv = require('yargs').argv;
 const _ = require('lodash');
-const debug = require('debug')('app:webpack.config');
+const debug = require('debug')('app:config:webpack');
 const webpack = require('webpack');
-const cssnano = require('cssnano');
 const os = require('os');
+const HappyPack = require('happypack');
+const cssnano = require('cssnano');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
-const HappyPack = require('happypack');
 const CompressionPlugin = require('compression-webpack-plugin');
 const vConsolePlugin = require('vconsole-webpack-plugin');
-const NyanProgressPlugin = require('nyan-progress-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const defaultConfig = require('./default.config');
-
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
 const __DEV__ = defaultConfig.globals.__DEV__;
@@ -25,27 +25,32 @@ const __PROD__ = defaultConfig.globals.__PROD__;
 const ENCODE = __PROD__ ? 'chunkhash:8' : 'hash:8';
 
 /**
- * base 基础配置
- */
+|--------------------------------------------------
+| base 基础配置
+|--------------------------------------------------
+*/
 const webpackConfig = {
   target: 'web',
   devtool: __DEV__ ? defaultConfig.dev_devtool : defaultConfig.compiler_devtool,
   module: {},
 };
 /**
- * entry 入口配置
- */
+|--------------------------------------------------
+| entry 入口配置
+|--------------------------------------------------
+*/
 const APP_ENTRY = defaultConfig.paths.client('index.js');
-
 webpackConfig.entry = {
   app: __DEV__
     ? [APP_ENTRY].concat(`webpack-hot-middleware/client?path=${defaultConfig.compiler_public_path}__webpack_hmr`)
     : [APP_ENTRY],
-  vendor: defaultConfig.compiler_vendors,
+  common: defaultConfig.compiler_commons,
 };
 /**
- * output 输出配置
- */
+|--------------------------------------------------
+| output 输出配置
+|--------------------------------------------------
+*/
 webpackConfig.output = {
   chunkFilename: `[name].[${ENCODE}].chunk.js`,
   filename: `[name].[${ENCODE}].js`,
@@ -53,8 +58,10 @@ webpackConfig.output = {
   publicPath: defaultConfig.compiler_public_path,
 };
 /**
- * resolve 解析
- */
+|--------------------------------------------------
+| resolve 解析
+|--------------------------------------------------
+*/
 webpackConfig.resolve = {
   extensions: defaultConfig.resolve_extensions,
   alias: ((obj) => {
@@ -67,17 +74,25 @@ webpackConfig.resolve = {
   })(defaultConfig.resolve_alias),
 };
 /**
- * externals 外部扩展
- */
+|--------------------------------------------------
+| externals 外部扩展
+|--------------------------------------------------
+*/
 webpackConfig.externals = defaultConfig.externals;
 webpackConfig.externals['react/lib/ExecutionEnvironment'] = true;
 webpackConfig.externals['react/lib/ReactContext'] = true;
 webpackConfig.externals['react/addons'] = true;
 /**
- * plugins 插件
- */
+|--------------------------------------------------
+| plugins 插件
+|--------------------------------------------------
+*/
 webpackConfig.plugins = [
   new webpack.DefinePlugin(defaultConfig.globals),
+  new webpack.DllReferencePlugin({
+    context: path.resolve(__dirname, "../"),
+    manifest: require('../vendor-manifest.json')
+  }),
   // 多线程加速代码构建
   new HappyPack({
     id: 'js',
@@ -85,9 +100,7 @@ webpackConfig.plugins = [
     threadPool: happyThreadPool,
     cache: true,
     verbose: true,
-  }),
-  // 进度条样式插件
-  new NyanProgressPlugin()
+  })
 ];
 
 if (__DEV__) {
@@ -125,6 +138,9 @@ if (__DEV__) {
         screw_ie8: true,
       },
     }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    }),
     // 去除重复模块依赖
     new webpack.optimize.AggressiveMergingPlugin(),
     // 提取共享的依赖
@@ -140,7 +156,17 @@ if (__DEV__) {
       basePath: `${defaultConfig.paths.dist()}/`,
     }),
     // webpack 3.0.0 范围提升（Scope Hoisting）
-    new webpack.optimize.ModuleConcatenationPlugin()
+    new webpack.optimize.ModuleConcatenationPlugin(),
+    // copy 文件
+    new CopyWebpackPlugin([{
+      context: path.resolve(__dirname, '../public'),
+      from: '**/*',
+      to: path.relative(__dirname, './dist'),
+    }]),
+    // 清除文件夹
+    new CleanWebpackPlugin(['dist'], {
+      root: path.resolve(__dirname, '../')
+    })
   );
 }
 
@@ -170,24 +196,23 @@ webpackConfig.plugins.push(
   })
 );
 /**
- * module 模块
- */
-
-// javascript loaders
+|--------------------------------------------------
+| module 模块
+|--------------------------------------------------
+*/
 webpackConfig.module.rules = [{
   test: /\.(js|jsx)$/,
   use: ['happypack/loader?id=js'],
   exclude: /node_modules/,
 }];
 
-// eslint loaders
 // webpackConfig.module.rules.push({
 //   test: /\.(js|jsx)$/,
 //   enforce: 'pre',
 //   use: 'eslint-loader',
+//   exclude: /node_modules/,
 // });
 
-// style-css loaders
 webpackConfig.module.rules.push({
   test: /\.css$/,
   use: [{
@@ -204,7 +229,6 @@ webpackConfig.module.rules.push({
   }],
 });
 
-// style-less loaders
 webpackConfig.module.rules.push({
   test: /\.less$/,
   use: [{
@@ -224,7 +248,6 @@ webpackConfig.module.rules.push({
   }],
 });
 
-// style-sass loaders
 webpackConfig.module.rules.push({
   test: /\.scss$/,
   use: [{
@@ -241,7 +264,6 @@ webpackConfig.module.rules.push({
   }],
 });
 
-// file loaders
 webpackConfig.module.rules.push(
   { test: /\.woff(\?.*)?$/, loader: ['url?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff'] },
   { test: /\.woff2(\?.*)?$/, loader: ['url?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff2'] },
@@ -252,6 +274,12 @@ webpackConfig.module.rules.push(
   { test: /\.(png|jpg|gif)$/, use: ['url-loader?limit=8192'] },
   { test: /\.(flv|mp4)$/, use: ['file-loader'] },
 );
+
+/**
+|--------------------------------------------------
+| 功能
+|--------------------------------------------------
+*/
 
 // gizp （需在生产环境才能启动）
 if (__PROD__ && defaultConfig.gizp.disable) {
@@ -282,7 +310,11 @@ if (defaultConfig.extractTextPlugin.disable) {
     })
   );
 }
+
 // htmlWebpackPlugin （需在生产环境才能启动）
+defaultConfig.htmlWebpackPlugin.config.files = {
+  vendor: require('../config-manifest.json').script  // 读取映射文件config-manifest.json script配置
+};
 if (defaultConfig.htmlWebpackPlugin.disable) {
   if (_.isObject(defaultConfig.htmlWebpackPlugin.config)) {
     if (_.isEmpty(defaultConfig.htmlWebpackPlugin.config)) {
