@@ -27,6 +27,9 @@ npm run mock / yarn add mock
 - babel
 - eslint
 
+## Pack
+打包出的js文件分为三类`vendor`，`common`，`*(other)`，分别对应配置未见`default.config.js`中的`compiler_vendors`,`compiler_commons`,`其它的打包出来的js文件（不在重点）`。要求：`compiler_vendors`放的是第三方npm包的依赖，而`compiler_commons`放的是逻辑代码中公共封装部分
+
 # babel
 配置说明
 
