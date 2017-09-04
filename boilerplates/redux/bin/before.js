@@ -34,6 +34,7 @@ const compile = function() {
       debug('No errors or warnings encountered.')
     }
     fs.writeJsonSync(file, {
+      env: process.env.NODE_ENV,
       vendor: defaultConfig.compiler_vendors,
       script: `<script src="./${jsonStats.assetsByChunkName.vendor}"></script>`
     });
@@ -50,10 +51,17 @@ fs.pathExists(file)
       debug('Check if vendor config has changed.');
       const json = require('../config-manifest.json');
       if (_.isEqual(json.vendor, defaultConfig.compiler_vendors)) {
-        debug('Vendor config result is different.');
-        start();
+        debug('Vendor config result is equal.');
+        const content = fs.readFileSync(file);
+        if (json.env === process.env.NODE_ENV) {
+          start();
+        } else {
+          debug('The environment for compiling files is inconsistent with the current environment.');
+          fs.removeSync(file);
+          compile();
+        }
       } else {
-        debug('Vendor config result is equal.')
+        debug('Vendor config result is different.');
         fs.removeSync(file);
         compile();
       }

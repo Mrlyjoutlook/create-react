@@ -1,12 +1,13 @@
 {
   "name": "react",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "react redux app project",
   "scripts": {
     "start": "better-npm-run start",
     "dev": "better-npm-run dev",
     "compile": "better-npm-run compile",
-    "dll": "better-npm-run dll",
+    "prod:dll": "better-npm-run prod:dll",
+    "dev:dll": "better-npm-run dev:dll",
     "mock": "better-npm-run mock",
     "deploy": "better-npm-run deploy",
     "deploy:dev": "better-npm-run deploy:dev",
@@ -33,9 +34,17 @@
         "DEBUG": "app:*"
       }
     },
-    "dll": {
+    "prod:dll": {
       "command": "webpack --config ./config/webpack.config.dll.js",
-      "NODE_ENV": "production"
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "dev:dll": {
+      "command": "webpack --config ./config/webpack.config.dll.js",
+      "env": {
+        "NODE_ENV": "development"
+      }
     },
     "mock": {
       "command": "cd mock && node mockServer",

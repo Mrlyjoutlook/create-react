@@ -14,7 +14,13 @@ module.exports = {
     filename: '[name]_[chunkhash:8].dll.js',
     library: '[name]_library'
   },
-  plugins: [
+  plugins: process.env.NODE_ENV === 'development' ? [
+    new webpack.DllPlugin({
+      context: path.resolve(__dirname, "../"),
+      name: '[name]_library',
+      path: path.join(__dirname, '../', '[name]-manifest.json')
+    })
+  ] : [
     new webpack.DllPlugin({
       context: path.resolve(__dirname, "../"),
       name: '[name]_library',

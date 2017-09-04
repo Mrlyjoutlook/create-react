@@ -1,6 +1,7 @@
 # create-app webpack配置文件
 
 # update logs
+- 2017.09.04 增加webpack dll功能，优化开发体验
 - 2017.07.10 完善插件配置和相关文档
 - 2017.06.25 完善配置文档
 - 2017.06.24 升级webpack 3.x

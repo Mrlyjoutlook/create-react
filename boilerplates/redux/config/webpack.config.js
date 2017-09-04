@@ -313,7 +313,7 @@ if (defaultConfig.extractTextPlugin.disable) {
 
 // htmlWebpackPlugin （需在生产环境才能启动）
 defaultConfig.htmlWebpackPlugin.config.files = {
-  vendor: require('../config-manifest.json').script  // 读取映射文件config-manifest.json script配置
+  vendor: require('../config-manifest.json').script,  // 读取映射文件config-manifest.json script配置
 };
 if (defaultConfig.htmlWebpackPlugin.disable) {
   if (_.isObject(defaultConfig.htmlWebpackPlugin.config)) {
