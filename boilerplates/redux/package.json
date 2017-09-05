@@ -1,6 +1,6 @@
 {
   "name": "react",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "react redux app project",
   "scripts": {
     "start": "better-npm-run start",
