@@ -1,3 +1,8 @@
+# Notice
+The project has been update and moved to [new address](https://github.com/Mrlyjoutlook/generator-react-app-cli)  
+
+项目已经升级和迁移[新地址](https://github.com/Mrlyjoutlook/generator-react-app-cli)
+
 # Create-React
 create react project engineer
 

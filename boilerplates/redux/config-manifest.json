@@ -1,1 +1,1 @@
-{"env":"development","vendor":["react","react-redux","react-dom","react-router-dom","redux","redux-thunk","redux-saga"],"script":"<script src=\"./vendor_8a0440d4.dll.js\"></script>"}
+{"env":"production","vendor":["react","react-dom"],"script":"<script src=\"./vendor_1416ea9f.dll.js\"></script>"}
